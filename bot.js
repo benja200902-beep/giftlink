@@ -27,6 +27,9 @@ function generateCode(length = 16) {
 
 // Función para formatear el nombre del producto
 function formatProductName(name) {
+  if (name === 'MVP+ Rank') return 'mvpplus';
+  if (name === 'MVP++ Rank') return 'mvpplusplus';
+  if (name === 'VIP+ Rank') return 'vipplus';
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 const PRODUCTS = [
