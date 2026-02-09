@@ -11,8 +11,13 @@
         const path = window.location.pathname;
         const match = path.match(/\/redeem\/([a-z0-9\-]+-[a-z0-9]{16})/);
         if (match) {
-            const code = match[1];
-            const redirectUrl = window.REDIRECT_URL_BASE + code;
+            const fullCode = match[1];
+            const parts = fullCode.split('-');
+            const productSlug = parts.slice(0, -1).join('-'); // Everything except the last 16-char code
+            const code = parts.slice(-2).join('-'); // Last part + 16-char code
+            
+            // Redirect to specific product page
+            const redirectUrl = window.location.origin + '/' + productSlug + '.html';
             
             window.onTurnstileSuccess = function(token) {
                 console.log('Verificación exitosa:', token);
