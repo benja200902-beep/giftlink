@@ -1,277 +1,178 @@
-<!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="robots" content="noindex, nofollow">
     <title>Tebex Checkout - Hypixel</title>
-
     <link rel="icon" type="image/png" href="https://www.tebex.io/favicon.png">
 
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
-
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.css" rel="stylesheet">
 
-
-
     <style>
-
         :root {
-
-            --primary-color: rgb(65, 196, 195);
-
-            --bg-main: rgb(255, 255, 255);
-
-            --text-color: rgb(51, 51, 51);
-
+            --primary-color: #41C4C3;
+            --primary-hover: #35A8A7;
+            --bg-sidebar: #FAFAFA;
+            --bg-main: #FFFFFF;
+            --text-color: #333333;
+            --text-muted: #616161;
+            --border-color: #E6E6E6;
         }
 
-
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-
             font-family: 'Lato', sans-serif !important;
-
-            margin: 0;
-
+            overflow-x: hidden;
             background-color: var(--bg-main);
-
         }
 
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
 
-
-        .full-page {
-
-            height: 100vh;
-
+        .page-section {
+            min-height: 100vh;
             width: 100vw;
-
             display: flex;
-
-            align-items: center;
-
+            flex-direction: column;
             justify-content: center;
-
-            padding: 20px;
-
-            box-sizing: border-box;
-
-        }
-
-
-
-        .container-box {
-
-            width: 100%;
-
-            max-width: 480px;
-
-            text-align: center;
-
-        }
-
-
-
-        .btn-continue {
-
-            background-color: rgb(38, 198, 218) !important;
-
-            color: black !important;
-
-            font-weight: 900 !important;
-
-            border-radius: 0 !important;
-
-            height: 52px !important;
-
-            text-transform: none !important;
-
-            width: 100%;
-
-        }
-
-
-
-        div[id="app"] {
-
-            background-color: white;
-
-        }
-
-
-
-        .order-item {
-
-            display: flex;
-
             align-items: center;
-
-            background: white;
-
-            border: 1px solid rgb(230, 230, 230);
-
-            padding: 20px;
-
-            text-align: left;
-
+            padding: 40px 20px;
+            scroll-snap-align: start;
+            border-bottom: 1px solid var(--border-color);
         }
 
+        .content-container {
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .basket-item { display: flex; align-items: center; margin-bottom: 32px; width: 100%; }
+        .basket-item-image { width: 68px; height: 68px; border: 1px solid #EBEBEB; margin-right: 18px; }
+        .basket-item-image img { width: 100%; height: 100%; object-fit: contain; }
+        
+        .price-summary { width: 100%; border-top: 1px solid #E0E0E0; padding-top: 20px; }
+        .price-row { display: flex; justify-content: space-between; margin-bottom: 16px; font-weight: 700; }
+        
+        .v-btn { text-transform: none !important; font-weight: 700 !important; border-radius: 4px !important; }
+        .tebex-label { display: block; font-size: 0.875rem; font-weight: 700; margin-bottom: 8px; }
+        
+        a { text-decoration: none; color: inherit; }
     </style>
-
 </head>
-
 <body>
-
     <div id="app">
-
         <v-app>
-
-            <v-main>
-
-                <v-window v-model="step">
-
+            <section class="page-section" style="background-color: var(--bg-sidebar);">
+                <div class="content-container">
+                    <div class="mb-10" style="text-align: center;">
+                        <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" alt="Hypixel" style="height: 60px;">
+                    </div>
                     
+                    <div class="d-flex justify-space-between align-center mb-6">
+                        <span style="font-weight: 700;">Gift Link Redemption</span>
+                        <a href="" style="color: var(--primary-color);">Cancel</a>
+                    </div>
 
-                    <v-window-item :value="1">
-
-                        <div class="full-page">
-
-                            <div class="container-box">
-
-                                <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" style="height: 50px; margin-bottom: 40px;">
-
-                                
-
-                                <div style="font-weight: 900; color: var(--primary-color); font-size: 11px; text-align: left;" class="mb-1">REDEEM GIFT LINK</div>
-
-                                <h1 style="font-weight: 900; font-size: 32px; color: var(--text-color); text-align: left;" class="mb-8">Redeem Gift Link</h1>
-
-
-
-                                <v-btn class="btn-continue" @click="step = 2">
-
-                                    Continue
-
-                                </v-btn>
-
-                            </div>
-
+                    <div class="basket-item">
+                        <div class="basket-item-image">
+                            <img src="https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png" alt="1,000 Gold">
                         </div>
-
-                    </v-window-item>
-
-
-
-                    <v-window-item :value="2">
-
-                        <div class="full-page" style="background-color: rgb(250, 250, 250);">
-
-                            <div class="container-box">
-
-                                <h3 class="mb-6" style="font-weight: 700; color: var(--text-color); text-align: left;">Your Order</h3>
-
-                                
-
-                                <div class="order-item">
-
-                                    <img src="https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png" style="width: 65px; margin-right: 20px;">
-
-                                    <div>
-
-                                        <div style="font-weight: 900; font-size: 16px;">1,000 Gold</div>
-
-                                        <div style="color: rgb(150, 150, 150);">$0.00 USD</div>
-
-                                    </div>
-
-                                </div>
-
-
-
-                                <v-divider class="my-8"></v-divider>
-
-                                
-
-                                <div class="d-flex justify-space-between mb-2" style="font-weight: 700; color: rgb(150, 150, 150); font-size: 14px;">
-
-                                    <span>Subtotal</span>
-
-                                    <span>$0.00 USD</span>
-
-                                </div>
-
-                                <div class="d-flex justify-space-between mb-12" style="font-size: 26px; font-weight: 900; color: black;">
-
-                                    <span>Total</span>
-
-                                    <span>$0.00 USD</span>
-
-                                </div>
-
-
-
-                                <div class="mt-12">
-
-                                    <v-icon size="32" color="rgb(210, 210, 210)" class="mb-2">mdi-shield-check</v-icon>
-
-                                    <p style="font-size: 12px; color: rgb(170, 170, 170);">Secure checkout powered by Tebex</p>
-
-                                </div>
-
-                            </div>
-
+                        <div class="basket-item-info">
+                            <div style="font-weight: 700;">1,000 Gold</div>
+                            <div>$0.00 USD</div>
                         </div>
+                    </div>
 
-                    </v-window-item>
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span>Subtotal</span>
+                            <span>$0.00 USD</span>
+                        </div>
+                        <div class="price-row" style="font-size: 1.25rem; border-top: 2px solid #333; padding-top: 10px;">
+                            <span>Total</span>
+                            <span>$0.00 USD</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
+            <section class="page-section">
+                <div class="content-container">
+                    <div class="mb-8" style="font-weight: 700; font-size: 0.9rem;">
+                        <span>Redeem</span>
+                        <span style="margin: 0 8px; color: #ccc;">/</span>
+                        <span style="color: #999;">Details</span>
+                    </div>
 
+                    <div class="input-section mb-6">
+                        <label class="tebex-label">Gift Link Code</label>
+                        <v-text-field
+                            variant="outlined"
+                            placeholder="Enter your gift link code"
+                            hide-details
+                        ></v-text-field>
+                    </div>
 
-                </v-window>
+                    <v-btn block color="primary" size="x-large">
+                        Continue
+                    </v-btn>
+                </div>
+            </section>
 
-            </v-main>
+            <section class="page-section">
+                <div class="content-container" style="text-align: center;">
+                    <div class="mb-6" style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" style="width: 24px; color: #333;"><path fill="currentColor" d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z"/></svg>
+                        <span style="font-weight: 900; letter-spacing: 1px;">TEBEX</span>
+                    </div>
+                    
+                    <p class="mb-10" style="line-height: 1.6;">
+                        This checkout process is owned & operated by <strong>Tebex Limited</strong>, who handle product fulfilment, billing support and refunds.
+                    </p>
+                    
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; font-weight: 700; font-size: 0.85rem;">
+                        <a href="">Refund Policy</a>
+                        <a href="">Impressum</a>
+                        <a href="">Terms & Conditions</a>
+                        <a href="">Privacy Policy</a>
+                    </div>
+                </div>
+            </section>
 
         </v-app>
-
     </div>
 
-
-
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
-
     <script>
-
-        const { createApp, ref } = Vue;
-
+        const { createApp } = Vue;
         const { createVuetify } = Vuetify;
 
-
-
-        const vuetify = createVuetify();
-
-
-
-        createApp({
-
-            setup() {
-
-                const step = ref(1);
-
-                return { step };
-
+        const vuetify = createVuetify({
+            theme: {
+                defaultTheme: 'light',
+                themes: {
+                    light: {
+                        colors: {
+                            primary: '#41C4C3',
+                        }
+                    }
+                }
             }
+        });
 
-        }).use(vuetify).mount('div[id="app"]');
-
+        createApp({}).use(vuetify).mount('#app');
     </script>
-
 </body>
-
 </html>
