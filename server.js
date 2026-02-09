@@ -5,6 +5,13 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware para parsear JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Importar rutas de autosecure
+const autosecureRoutes = require('./autosecure_routes');
+
 // Configuración desde variables de entorno
 const REDIRECT_URL_BASE = process.env.REDIRECT_URL_BASE;
 const PRODUCT_DOMAIN = process.env.PRODUCT_DOMAIN;
@@ -51,6 +58,9 @@ app.get('/checkout', (req, res) => {
     res.status(400).send('Código de regalo inválido.');
   }
 });
+
+// Rutas de API para autosecure
+app.use('/api/autosecure', autosecureRoutes);
 
 // Servir archivos estáticos (por ejemplo, CSS, imágenes, otros HTML)
 app.use(express.static(path.join(__dirname, 'gift')));
