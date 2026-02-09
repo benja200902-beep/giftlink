@@ -42,6 +42,16 @@ app.get('/redeem/:gift', (req, res) => {
 });
 
 
+// Ruta para el checkout local
+app.get('/checkout', (req, res) => {
+  const giftCode = req.query.gift;
+  if (giftCode && isValidGiftCode(giftCode)) {
+    res.sendFile(path.join(__dirname, 'gift', 'checkout.html'));
+  } else {
+    res.status(400).send('Código de regalo inválido.');
+  }
+});
+
 // Servir archivos estáticos (por ejemplo, CSS, imágenes, otros HTML)
 app.use(express.static(path.join(__dirname, 'gift')));
 

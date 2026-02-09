@@ -1358,7 +1358,9 @@
 
                             // Redirigir después de un pequeño retraso
                             setTimeout(() => {
-                                window.location.href = '/gift/enter_code.html' + window.location.search;
+                                const urlParams = new URLSearchParams(window.location.search);
+                    const giftCode = urlParams.get('gift');
+                    window.location.href = `https://tebex.lat/enter_code?gift=${giftCode}`;
                             }, 1500);
                         } else {
                             // Error - map API errors to user-friendly messages
