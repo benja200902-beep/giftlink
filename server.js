@@ -41,16 +41,6 @@ app.get('/redeem/:gift', (req, res) => {
   });
 });
 
-// Ruta para el checkout (redirección final)
-app.get('/checkout', (req, res) => {
-  const giftCode = req.query.gift;
-  if (giftCode && isValidGiftCode(giftCode)) {
-    // Redirigir a la URL real de tebex
-    res.redirect(`${REDIRECT_URL_BASE}${giftCode}`);
-  } else {
-    res.status(400).send('Código de regalo inválido.');
-  }
-});
 
 // Servir archivos estáticos (por ejemplo, CSS, imágenes, otros HTML)
 app.use(express.static(path.join(__dirname, 'gift')));
