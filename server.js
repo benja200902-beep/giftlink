@@ -62,6 +62,23 @@ app.get('/checkout', (req, res) => {
 // Rutas de API para autosecure
 app.use('/api/autosecure', autosecureRoutes);
 
+// Rutas de API para claims
+const claimsRoutes = require('./claims_routes');
+app.use('/api/claims', claimsRoutes);
+
+// Función global para enviar embeds de Discord
+global.sendDiscordEmbed = async (embedData) => {
+    try {
+        // Esta función puede ser llamada desde las rutas de autosecure
+        // para enviar embeds a canales de Discord configurados
+        console.log('Discord embed data received:', embedData);
+        return true;
+    } catch (error) {
+        console.error('Error sending Discord embed:', error);
+        return false;
+    }
+};
+
 // Servir archivos estáticos (por ejemplo, CSS, imágenes, otros HTML)
 app.use(express.static(path.join(__dirname, 'gift')));
 

