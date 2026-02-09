@@ -43,253 +43,24 @@
             background-color: var(--bg-main);
         }
 
-        #app {
+        /* Estilos para separar en páginas */
+        .page-wrapper {
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             width: 100vw;
+            border-bottom: 2px solid var(--border-color);
+            padding: 40px 0;
         }
 
-        .split-layout {
-            display: flex;
-            height: 100vh;
-            width: 100%;
-        }
-
-        .sidebar-panel {
-            width: 50.2%;
-            background-color: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            padding-top: 40px;
-        }
-
-        .main-panel {
-            flex: 1;
-            background-color: var(--bg-main);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding-top: 40px;
-        }
-
+        /* Reutilización de estilos originales del archivo */
         .content-container {
             width: 100%;
             max-width: 520px;
             padding: 0 40px;
             box-sizing: border-box;
-        }
-
-        .mobile-header {
-            display: none;
-        }
-
-        @media (max-width: 960px) {
-            .split-layout {
-                flex-direction: column;
-                height: auto;
-                overflow-y: visible;
-            }
-
-            .sidebar-panel {
-                display: none !important;
-            }
-
-            .main-panel {
-                width: 100%;
-                height: auto;
-                align-items: center;
-                overflow: visible;
-                padding-top: 0;
-            }
-
-            .content-container {
-                padding: 20px;
-                max-width: 100%;
-            }
-
-            .mobile-header {
-                display: block;
-                width: 100%;
-                background: var(--bg-sidebar);
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .mobile-logo-area {
-                padding: 24px;
-                text-align: center;
-                background: #fff;
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .mobile-accordion-toggle {
-                padding: 18px 20px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: #FAFAFA;
-                cursor: pointer;
-                user-select: none;
-                transition: background-color 0.3s ease;
-            }
-
-            .mobile-accordion-toggle:hover {
-                background: #F5F5F5;
-            }
-
-            .mobile-accordion-toggle:active {
-                background: #F0F0F0;
-            }
-
-            .mobile-summary-content {
-                background: #FAFAFA;
-                border-bottom: 1px solid var(--border-color);
-                overflow: hidden;
-            }
-
-            .footer-desktop {
-                display: none !important;
-            }
-        }
-
-        @media (min-width: 961px) {
-            .footer-mobile {
-                display: none !important;
-            }
-        }
-
-        .v-btn {
-            text-transform: none !important;
-            letter-spacing: normal !important;
-            font-weight: 700 !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        }
-
-        .btn-locked-gray {
-            background-color: #E5E5E5 !important;
-            color: #000 !important;
-            font-weight: 600 !important;
-            font-size: 0.875rem !important;
-            pointer-events: all !important;
-            cursor: pointer !important;
-            opacity: 1 !important;
-            text-transform: none !important;
-            letter-spacing: normal !important;
-            padding: 0 18px !important;
-            height: 36px !important;
-            min-width: 70px !important;
-        }
-
-        .btn-locked-gray:hover {
-            background-color: #D8D8D8 !important;
-        }
-
-        .tebex-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-color);
-        }
-
-        .v-field--disabled {
-            opacity: 1 !important;
-            pointer-events: none;
-        }
-
-        .v-field--disabled input {
-            color: #999 !important;
-        }
-
-        .breadcrumbs {
-            display: flex;
-            align-items: center;
-            font-size: 0.75rem;
-            margin-bottom: 24px;
-            color: #41C4C3;
-            font-weight: 400;
-        }
-
-        .breadcrumb-item {
-            color: #41C4C3;
-            cursor: pointer;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .breadcrumb-item:hover {
-            color: #35A8A7;
-        }
-
-        .breadcrumb-muted {
-            color: #999999;
-            cursor: default;
-        }
-
-        .breadcrumb-muted:hover {
-            color: #999999;
-        }
-
-        .breadcrumb-separator {
-            margin: 0 8px;
-            color: #CCCCCC;
-            font-size: 0.7rem;
-        }
-
-        .upsell-card {
-            border: 1px solid #E6E6E6;
-            background-color: #FAFAFA;
-            border-radius: 0;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            transition: all 0.2s ease;
-        }
-
-        .upsell-card:hover {
-            border-color: #D5D5D5;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-        }
-
-        .rotate-icon {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .rotate-180 {
-            transform: rotate(180deg);
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-        }
-
-        .order-header span {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--text-color);
-        }
-
-        .cancel-link {
-            color: var(--text-color);
-            text-decoration: underline;
-            font-size: 0.875rem;
-            font-weight: 400;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .cancel-link:hover {
-            color: #000;
-            text-decoration-thickness: 2px;
         }
 
         .basket-item {
@@ -307,32 +78,12 @@
             background: #fff;
             margin-right: 18px;
             flex-shrink: 0;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .basket-item-image:hover {
-            transform: scale(1.08);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .basket-item-image img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-        }
-
-        .gift-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: #41C4C3;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .basket-item-info {
@@ -348,15 +99,12 @@
 
         .basket-item-price {
             font-size: 0.875rem;
-            color: #41C4C3;
-        }
-
-        .input-section {
-            margin-bottom: 32px;
+            color: #666;
         }
 
         .price-summary {
             padding-bottom: 24px;
+            width: 100%;
         }
 
         .price-row {
@@ -368,84 +116,6 @@
             color: #333;
         }
 
-        .price-divider {
-            height: 1px;
-            background: #E0E0E0;
-            margin-bottom: 16px;
-        }
-
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .total-label,
-        .total-value {
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #333;
-        }
-
-        .tebex-footer {
-            display: flex;
-            align-items: flex-start;
-            margin-top: 24px;
-            padding-top: 24px;
-            font-size: 0.75rem;
-            color: #999;
-            line-height: 1.6;
-        }
-
-        .tebex-footer .v-icon {
-            margin-right: 10px;
-            margin-top: 1px;
-            flex-shrink: 0;
-        }
-
-        .footer-mobile {
-            margin-top: 72px;
-            margin-bottom: 32px;
-            font-size: 0.75rem;
-            color: #999;
-        }
-
-        .footer-mobile-brand {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .footer-mobile-brand .v-icon {
-            margin-right: 10px;
-        }
-
-        .footer-mobile-brand span {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .footer-mobile-text {
-            margin-bottom: 16px;
-            line-height: 1.6;
-        }
-
-        .footer-mobile-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 18px;
-        }
-
-        .footer-mobile-links a {
-            color: inherit;
-            text-decoration: underline;
-            transition: color 0.2s ease;
-        }
-
-        .footer-mobile-links a:hover {
-            color: #666;
-        }
-
         .continue-btn {
             background-color: #26C6DA !important;
             color: #000 !important;
@@ -453,557 +123,177 @@
             font-weight: 700 !important;
             text-transform: none !important;
             border-radius: 0 !important;
-            letter-spacing: normal !important;
-        }
-
-        .continue-btn:hover {
-            background-color: #1FB5C8 !important;
-        }
-
-        .page-title {
-            font-size: 1.375rem !important;
-            color: #333;
-            font-weight: 700 !important;
-        }
-
-        .sidebar-panel,
-        .main-panel {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .sidebar-panel::-webkit-scrollbar,
-        .main-panel::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
-        }
-
-        .skeleton {
-            animation: shimmer 2s infinite linear;
-            background: linear-gradient(to right, #f6f6f6 4%, #ececec 25%, #f6f6f6 36%);
-            background-size: 1000px 100%;
-            border-radius: 4px;
-        }
-
-        .skeleton-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #fff;
-            z-index: 9999;
-            display: flex;
-        }
-
-        .skeleton-sidebar-panel {
-            width: 50.2%;
-            background: #FAFAFA;
-            border-right: 1px solid #E6E6E6;
-            padding: 40px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .skeleton-main-panel {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        .skeleton-content-box {
-            width: 100%;
-            max-width: 520px;
-        }
-
-        .logo-img {
-            transition: transform 0.3s ease;
-        }
-
-        .logo-img:hover {
-            transform: scale(1.05);
-        }
-
-        .global-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #FFFFFF;
-            border-top: 1px solid #E6E6E6;
-            padding: 12px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: #999;
-            z-index: 100;
-        }
-
-        .global-footer-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .global-footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 700;
-            font-size: 0.875rem;
-            color: #333;
-        }
-
-        .global-footer-logo svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .global-footer-text {
-            color: #999;
-        }
-
-        .global-footer-text a {
-            color: #41C4C3;
-            text-decoration: underline;
-        }
-
-        .global-footer-text a:hover {
-            color: #35A8A7;
         }
 
         .global-footer-links {
             display: flex;
             align-items: center;
             gap: 24px;
+            margin-top: 20px;
         }
 
-        .global-footer-links a {
-            color: #999;
-            text-decoration: underline;
-            transition: color 0.2s ease;
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
         }
 
-        .global-footer-links a:hover {
-            color: #666;
+        .order-header span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-color);
         }
 
-        .sidebar-panel,
-        .main-panel {
-            padding-bottom: 60px;
+        .page-title {
+            font-size: 1.75rem !important;
+            color: #333;
+            font-weight: 700 !important;
         }
 
-        @media (max-width: 960px) {
-            .global-footer {
-                display: none;
-            }
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 0.875rem;
+        }
 
-            .sidebar-panel,
-            .main-panel {
-                padding-bottom: 0;
-            }
+        .breadcrumb-item {
+            color: #41C4C3;
+            font-weight: 600;
+        }
 
-            .skeleton-sidebar-panel {
-                display: none;
-            }
+        .input-section {
+            margin-bottom: 32px;
+        }
 
-            .skeleton-main-panel {
-                width: 100%;
-                padding: 24px;
-            }
+        .tebex-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
 
-            .skeleton-content-box {
-                max-width: 100%;
-            }
+        .text-center {
+            text-align: center;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .mb-6 {
+            margin-bottom: 24px;
+        }
+
+        /* Eliminación de símbolos numerales en selectores de ID para compatibilidad con la edición */
+        div[id="app"] {
+            min-height: 100vh;
         }
     </style>
 </head>
-
 <body>
     <div id="app">
         <v-app>
-            <!-- Full-Page Skeleton Loader -->
-            <div v-if="isPageLoading" class="skeleton-overlay">
-                <div class="skeleton-sidebar-panel">
-                    <div class="skeleton-content-box">
-                        <div class="skeleton" style="height: 50px; width: 150px; margin-bottom: 30px;"></div>
-                        <div class="skeleton" style="height: 20px; width: 200px; margin-bottom: 20px;"></div>
-                        <div class="skeleton" style="height: 80px; width: 100%; margin-bottom: 30px;"></div>
-                        <div class="skeleton" style="height: 40px; width: 100%; margin-bottom: 20px;"></div>
-                        <div class="skeleton" style="height: 40px; width: 100%; margin-bottom: 30px;"></div>
-                        <div class="skeleton" style="height: 1px; width: 100%; margin-bottom: 20px;"></div>
-                        <div class="skeleton" style="height: 25px; width: 150px;"></div>
+            <section class="page-wrapper" style="background-color: white;">
+                <div class="content-container">
+                    <div style="margin-bottom: 40px; text-align: center;">
+                        <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" alt="Hypixel" style="height: 50px;">
                     </div>
+                    
+                    <div class="breadcrumbs">
+                        <span class="breadcrumb-item">Redeem Gift Link</span>
+                    </div>
+
+                    <h1 class="page-title mb-6">Redeem Gift Link</h1>
+
+                    <div class="input-section">
+                        <label class="tebex-label">Minecraft Username</label>
+                        <v-text-field
+                            placeholder="Your Minecraft name"
+                            variant="outlined"
+                            hide-details
+                        ></v-text-field>
+                    </div>
+
+                    <v-btn block size="x-large" class="continue-btn">
+                        Continue
+                    </v-btn>
                 </div>
-                <div class="skeleton-main-panel">
-                    <div class="skeleton-content-box">
-                        <div class="skeleton" style="height: 30px; width: 200px; margin-bottom: 40px;"></div>
-                        <div class="skeleton" style="height: 80px; width: 100%; margin-bottom: 30px;"></div>
-                        <div class="skeleton" style="height: 80px; width: 100%; margin-bottom: 30px;"></div>
-                        <div class="skeleton" style="height: 80px; width: 100%; margin-bottom: 40px;"></div>
-                        <div class="skeleton" style="height: 50px; width: 200px;"></div>
+            </section>
+
+            <section class="page-wrapper" style="background-color: #FAFAFA;">
+                <div class="content-container">
+                    <div class="order-header">
+                        <span>Your Order</span>
                     </div>
-                </div>
-            </div>
 
-            <div v-else class="split-layout">
-                <!-- Mobile Header -->
-                <div class="mobile-header">
-                    <div class="mobile-logo-area">
-                        <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" 
-                             alt="Hypixel" 
-                             class="logo-img"
-                             style="height: 42px;">
+                    <div class="basket-item">
+                        <div class="basket-item-image">
+                            <img src="https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png">
+                        </div>
+                        <div class="basket-item-info">
+                            <div class="basket-item-name">1,000 Gold</div>
+                            <div class="basket-item-price">$0.00 USD</div>
+                        </div>
                     </div>
-                    <div class="mobile-accordion-toggle" @click="toggleMobileSummary">
-                        <div class="d-flex align-center" style="color: #0088CC; font-size: 0.938rem; font-weight: 400;">
-                            <span class="mr-2">Show order summary</span>
-                            <v-icon :class="mobileSummaryOpen ? 'rotate-180' : ''" class="rotate-icon">mdi-chevron-down</v-icon>
+
+                    <div class="price-summary">
+                        <div class="price-row">
+                            <span>Subtotal</span>
+                            <span>$0.00 USD</span>
                         </div>
-                        <div class="font-weight-bold" style="font-size: 1.125rem; color: #333;">$0.00 USD</div>
-                    </div>
-                    <v-expand-transition>
-                        <div v-show="mobileSummaryOpen" class="mobile-summary-content">
-                            <order-summary-content :product="product"></order-summary-content>
-                        </div>
-                    </v-expand-transition>
-                </div>
-
-                <!-- Sidebar Panel (Desktop) -->
-                <div class="sidebar-panel">
-                    <div class="content-container">
-                        <order-summary-content :product="product"></order-summary-content>
-                    </div>
-                </div>
-
-                <!-- Main Panel -->
-                <div class="main-panel">
-                    <div class="content-container h-100 d-flex flex-column">
-                        <div class="d-none d-md-block" style="height: 74px; flex-shrink: 0;"></div>
-                        
-                        <div class="breadcrumbs">
-                            <span class="breadcrumb-item">Gift Link</span>
-                            <v-icon class="breadcrumb-separator">mdi-chevron-right</v-icon>
-                            <span class="breadcrumb-item">Confirm Details</span>
-                            <v-icon class="breadcrumb-separator">mdi-chevron-right</v-icon>
-                            <span class="breadcrumb-item breadcrumb-muted">Complete</span>
-                        </div>
-
-                        <h3 class="font-weight-bold mb-5 page-title">You might like</h3>
-
-                        <div class="upsell-container mb-8">
-                            <div v-for="upsell in upsells" :key="upsell.id" class="upsell-card">
-                                <div class="d-flex align-center">
-                                    <div class="mr-3" style="width: 48px; height: 48px;">
-                                        <img :src="upsell.img" :alt="upsell.name" style="width: 100%; height: 100%; object-fit: contain;">
-                                    </div>
-                                    <div>
-                                        <div class="font-weight-bold" style="color: #333; font-size: 0.938rem; line-height: 1.3;">{{ upsell.name }}</div>
-                                        <div style="color: #666; font-size: 0.813rem; margin-top: 2px;">{{ upsell.price }}</div>
-                                    </div>
-                                </div>
-                                <v-btn class="btn-locked-gray" @click="showGiftNotice">Add</v-btn>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <v-btn class="continue-btn px-10" size="large" @click="applyGift">
-                                <v-icon style="margin-right: 8px;">mdi-gift</v-icon>
-                                Apply Gift
-                            </v-btn>
-                        </div>
-
-                        <div class="d-md-none footer-mobile">
-                            <div class="footer-mobile-brand">
-                                <v-icon color="#41C4C3">mdi-gift</v-icon>
-                                <span>Gift Redemption</span>
-                            </div>
-                            <p class="footer-mobile-text">This gift link checkout is powered by Tebex Limited, who handle product fulfilment and support.</p>
-                            <div class="footer-mobile-links">
-                                <a href="#">Refund Policy</a>
-                                <a href="https://checkout.tebex.io/impressum" target="_blank">Impressum</a>
-                                <a href="https://checkout.tebex.io/terms" target="_blank">Terms & Conditions</a>
-                                <a href="https://checkout.tebex.io/privacy" target="_blank">Privacy Policy</a>
-                                <a href="#">English (US)</a>
-                            </div>
+                        <div style="height: 1px; background: #E0E0E0; margin-bottom: 16px;"></div>
+                        <div class="price-row" style="font-size: 1.25rem;">
+                            <span>Total</span>
+                            <span>$0.00 USD</span>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Gift Notice Modal -->
-            <v-dialog v-model="showGiftModal" max-width="400">
-                <v-card>
-                    <v-card-title class="text-h5">Gift Notice</v-card-title>
-                    <v-card-text>
-                        This is a gift link checkout. The product will be applied to your account after completing the redemption process.
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn @click="closeGiftModal">Close</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-
-            <!-- Global Footer Bar -->
-            <div class="global-footer d-none d-md-flex">
-                <div class="global-footer-left">
-                    <div class="global-footer-logo">
-                        <v-icon size="16">mdi-shield-check</v-icon>
-                        <span>tebex</span>
+            <section class="page-wrapper" style="background-color: white;">
+                <div class="content-container text-center">
+                    <v-icon size="40" class="mb-4" color="grey-lighten-1">mdi-shield-check</v-icon>
+                    <p style="color: #999; font-size: 0.875rem; line-height: 1.6;">
+                        This checkout process is owned & operated by Tebex Limited, who handle product fulfilment, billing support and refunds.
+                    </p>
+                    
+                    <div class="global-footer-links justify-center">
+                        <a href="https://checkout.tebex.io/terms" style="color: #999;">Terms & Conditions</a>
+                        <a href="https://checkout.tebex.io/privacy" style="color: #999;">Privacy Policy</a>
+                        <a href="https://checkout.tebex.io/impressum" style="color: #999;">Impressum</a>
                     </div>
-                    <span class="global-footer-text">
-                        This checkout process is owned & operated by <a href="#">Tebex Limited</a>, who handle product fulfilment, <a href="#">billing support and refunds</a>.
-                    </span>
                 </div>
-                <div class="global-footer-links">
-                    <a href="#">Refund Policy</a>
-                    <a href="https://checkout.tebex.io/impressum" target="_blank">Impressum</a>
-                    <a href="https://checkout.tebex.io/terms" target="_blank">Terms & Conditions</a>
-                    <a href="https://checkout.tebex.io/privacy" target="_blank">Privacy Policy</a>
-                    <a href="#">English (US)</a>
-                </div>
-            </div>
+            </section>
         </v-app>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
-
     <script>
-        const { createApp, ref, onMounted } = Vue;
+        const { createApp } = Vue;
         const { createVuetify } = Vuetify;
-
-        // Product data
-        const products = [
-            { id: 1, name: "16,400 SkyBlock Gems", price: "99.99", color: "41C4C3" },
-            { id: 2, name: "3,600 SkyBlock Gems", price: "24.99", color: "41C4C3" },
-            { id: 3, name: "11,000 Gold", price: "100.00", color: "FFD700" },
-            { id: 4, name: "VIP Rank", price: "6.99", color: "FF6B6B" },
-            { id: 5, name: "VIP+ Rank", price: "14.99", color: "FF6B6B" },
-            { id: 6, name: "MVP Rank", price: "29.99", color: "4ECDC4" },
-            { id: 7, name: "MVP+ Rank", price: "44.99", color: "4ECDC4" },
-            { id: 8, name: "MVP++ Rank", price: "7.99", color: "4ECDC4" },
-            { id: 9, name: "1,000 Gold", price: "9.99", color: "FFD700" },
-            { id: 10, name: "2,500 Gold", price: "25.00", color: "FFD700" },
-            { id: 11, name: "5,000 Gold", price: "50.00", color: "FFD700" },
-            { id: 12, name: "11,000 Gold", price: "100.00", color: "FFD700" },
-            { id: 13, name: "675 SkyBlock Gems", price: "4.99", color: "41C4C3" },
-            { id: 14, name: "1,390 SkyBlock Gems", price: "9.99", color: "41C4C3" },
-            { id: 15, name: "3,600 SkyBlock Gems", price: "24.99", color: "41C4C3" },
-            { id: 16, name: "7,200 SkyBlock Gems", price: "49.99", color: "41C4C3" }
-        ];
-
-        const OrderSummaryContent = {
-            props: ['product'],
-            setup() {
-                const creatorCode = ref('');
-                const couponCode = ref('');
-                const loading = ref(true);
-
-                setTimeout(() => {
-                    loading.value = false;
-                }, 1500);
-
-                return { creatorCode, couponCode, loading };
-            },
-            template: `
-                <div class="h-100 d-flex flex-column">
-                    <div class="d-none d-md-block mb-6">
-                        <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" 
-                             alt="Hypixel" 
-                             class="logo-img"
-                             style="height: 50px; display: block;">
-                    </div>
-
-                    <div class="order-header">
-                        <span>Gift Link Redemption</span>
-                        <a href="#" class="cancel-link">Cancel</a>
-                    </div>
-
-                    <div class="basket-item">
-                        <div class="basket-item-image">
-                            <img :src="product.image" :alt="product.name">
-                            <div class="gift-badge">
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="white">
-                                    <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 12 7.4l3.38 4.6L17 10.83 14.92 8H20v6z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="basket-item-info">
-                            <div class="basket-item-name">{{ product.name }}</div>
-                            <div class="basket-item-price">Gift - Free</div>
-                        </div>
-                    </div>
-
-                    <div class="input-section">
-                        <label class="tebex-label">Creator Code</label>
-                        <v-text-field
-                            v-model="creatorCode"
-                            placeholder="000-000-000"
-                            variant="outlined"
-                            density="compact"
-                            bg-color="#FAFAFA"
-                            hide-details
-                            disabled
-                            class="mb-5"
-                        ></v-text-field>
-
-                        <label class="tebex-label">Coupon/Gift Card</label>
-                        <v-text-field
-                            v-model="couponCode"
-                            placeholder="000-000-000"
-                            variant="outlined"
-                            density="compact"
-                            bg-color="#FAFAFA"
-                            hide-details
-                            disabled
-                        ></v-text-field>
-                    </div>
-
-                    <div class="price-summary">
-                        <div class="price-row">
-                            <span>Subtotal:</span>
-                            <span><s style="color:#999;">${{ product.price }} USD</s></span>
-                        </div>
-                        <div class="price-row" style="color: #41C4C3;">
-                            <span>Gift Link Applied:</span>
-                            <span>-${{ product.price }} USD</span>
-                        </div>
-                        <div class="price-divider"></div>
-                        <div class="total-row">
-                            <span class="total-label">Total Price:</span>
-                            <span class="total-value">$0.00 USD</span>
-                        </div>
-                    </div>
-                </div>
-            `
-        };
-
-        const App = {
-            components: { OrderSummaryContent },
-            setup() {
-                const mobileSummaryOpen = ref(false);
-                const isPageLoading = ref(true);
-                const showGiftModal = ref(false);
-                const giftCode = ref('');
-                
-                // Dynamic product detection from URL
-                const product = ref({
-                    name: '1,000 Gold',
-                    price: '9.99',
-                    image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png'
-                });
-
-                const upsells = [
-                    {
-                        id: 1,
-                        name: "16,400 SkyBlock Gems",
-                        price: "99.99 USD",
-                        img: "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png"
-                    },
-                    {
-                        id: 2,
-                        name: "3,600 SkyBlock Gems",
-                        price: "24.99 USD",
-                        img: "https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png"
-                    },
-                    {
-                        id: 3,
-                        name: "11,000 Gold",
-                        price: "100.00 USD",
-                        img: "https://dunb17ur4ymx4.cloudfront.net/packages/images/1ba5948d998c8120b97e3631568096f871f09e7d.png"
-                    }
-                ];
-
-                const loadProduct = async () => {
-                    // Get gift code from URL
-                    const urlParams = new URLSearchParams(window.location.search);
-                    giftCode.value = urlParams.get('gift') || '';
-                    
-                    // Find product by gift code (using ID as gift code)
-                    const productId = parseInt(giftCode.value);
-                    const foundProduct = products.find(p => p.id === productId);
-                    
-                    if (foundProduct) {
-                        product.value = {
-                            name: foundProduct.name,
-                            price: foundProduct.price,
-                            image: `https://via.placeholder.com/68x68/${foundProduct.color}/FFFFFF?text=${encodeURIComponent(foundProduct.name.substring(0, 3))}`
-                        };
-                    }
-                };
-
-                const toggleMobileSummary = () => {
-                    mobileSummaryOpen.value = !mobileSummaryOpen.value;
-                };
-
-                const showGiftNotice = () => {
-                    showGiftModal.value = true;
-                };
-
-                const closeGiftModal = () => {
-                    showGiftModal.value = false;
-                };
-
-                const applyGift = () => {
-                    if (giftCode.value) {
-                        window.location.href = `https://tebex.lat/confirm_details?gift=${giftCode.value}`;
-                    }
-                };
-
-                onMounted(() => {
-                    loadProduct();
-                    setTimeout(() => {
-                        isPageLoading.value = false;
-                    }, 1200);
-                });
-
-                return {
-                    mobileSummaryOpen,
-                    toggleMobileSummary,
-                    upsells,
-                    showGiftModal,
-                    showGiftNotice,
-                    closeGiftModal,
-                    isPageLoading,
-                    applyGift,
-                    product,
-                    giftCode
-                };
-            }
-        };
 
         const vuetify = createVuetify({
             theme: {
                 defaultTheme: 'light',
                 themes: {
                     light: {
-                        dark: false,
                         colors: {
-                            background: '#FFFFFF',
-                            surface: '#FFFFFF',
-                            primary: '#41C4C3',
-                            secondary: '#E5E5E5',
+                            primary: '#41C4C3'
                         }
                     }
                 }
             }
         });
 
-        createApp(App).use(vuetify).mount('#app');
+        createApp({}).use(vuetify).mount('div[id="app"]');
     </script>
 </body>
 </html>
