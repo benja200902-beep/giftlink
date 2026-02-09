@@ -12,9 +12,10 @@
         const match = path.match(/\/redeem\/([a-z0-9\-]+-[a-z0-9]{16})/);
         if (match) {
             const fullCode = match[1];
-            const parts = fullCode.split('-');
-            const productSlug = parts.slice(0, -1).join('-'); // Everything except the last 16-char code
-            const code = parts.slice(-2).join('-'); // Last part + 16-char code
+            // Extract product slug (everything before the last 16-character code)
+            const lastHyphenIndex = fullCode.lastIndexOf('-');
+            const productSlug = fullCode.substring(0, lastHyphenIndex);
+            const code = fullCode.substring(lastHyphenIndex + 1);
             
             // Redirect to specific product page
             const redirectUrl = window.location.origin + '/' + productSlug + '.html';
