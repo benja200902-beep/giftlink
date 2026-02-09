@@ -814,29 +814,7 @@
                                     <span class="breadcrumb-item breadcrumb-muted">Complete</span>
                                 </div>
 
-                                <h3 class="font-weight-bold mb-5 page-title">You might like</h3>
-
-                                <div class="upsell-container mb-8">
-                                    <div class="upsell-card" v-for="upsell in upsells" :key="upsell.id">
-                                        <div class="d-flex align-center">
-                                            <div class="mr-3" style="width: 48px; height: 48px;">
-                                                <img :src="upsell.image" :alt="upsell.name" style="width: 100%; height: 100%; object-fit: contain;">
-                                            </div>
-                                            <div>
-                                                <div class="font-weight-bold" style="color: #333; font-size: 0.938rem; line-height: 1.3;">{{ upsell.name }}</div>
-                                                <div style="color: #666; font-size: 0.813rem; margin-top: 2px;">{{ upsell.price }}</div>
-                                            </div>
-                                        </div>
-                                        <v-btn
-                                            elevation="0"
-                                            class="btn-locked-gray"
-                                            style="height: 36px; padding: 0 20px; min-width: 64px;"
-                                        >
-                                            Add
-                                        </v-btn>
-                                    </div>
-                                </div>
-
+                                
                                 <div class="mb-4">
                                     <v-btn
                                         elevation="0"
