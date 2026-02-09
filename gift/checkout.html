@@ -556,33 +556,75 @@
                 const loading = ref(false);
                 const isPageLoading = ref(false);
                 const showGiftModal = ref(false);
-                const product = ref({
-                    name: '1,000 Gold',
-                    image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png',
-                    originalPrice: '$9.99 USD',
-                    finalPrice: '$0.00 USD'
-                });
-
-                const upsells = ref([
-                    {
-                        id: 1,
-                        name: '16,400 SkyBlock Gems',
-                        price: '99.99 USD',
-                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png'
+                
+                // Product catalog
+                const products = {
+                    '1000-gold': {
+                        name: '1,000 Gold',
+                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png',
+                        originalPrice: '$9.99 USD',
+                        finalPrice: '$0.00 USD'
                     },
-                    {
-                        id: 2,
-                        name: '3,600 SkyBlock Gems',
-                        price: '24.99 USD',
-                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png'
+                    'vip-plus': {
+                        name: 'VIP+',
+                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png',
+                        originalPrice: '$29.99 USD',
+                        finalPrice: '$0.00 USD'
                     },
-                    {
-                        id: 3,
+                    '11000-gold': {
                         name: '11,000 Gold',
-                        price: '100.00 USD',
-                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/1ba5948d998c8120b97e3631568096f871f09e7d.png'
+                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/1ba5948d998c8120b97e3631568096f871f09e7d.png',
+                        originalPrice: '$100.00 USD',
+                        finalPrice: '$0.00 USD'
+                    },
+                    '3600-gems': {
+                        name: '3,600 SkyBlock Gems',
+                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png',
+                        originalPrice: '$24.99 USD',
+                        finalPrice: '$0.00 USD'
                     }
-                ]);
+                };
+                
+                // Get product from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const giftCode = urlParams.get('gift') || '1000-gold'; // default to gold
+                
+                const product = ref(products[giftCode] || products['1000-gold']);
+
+                // Dynamic upsells based on current product
+                const getUpsells = (currentProduct) => {
+                    const allUpsells = [
+                        {
+                            id: 1,
+                            name: '16,400 SkyBlock Gems',
+                            price: '99.99 USD',
+                            image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png'
+                        },
+                        {
+                            id: 2,
+                            name: '3,600 SkyBlock Gems',
+                            price: '24.99 USD',
+                            image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png'
+                        },
+                        {
+                            id: 3,
+                            name: '11,000 Gold',
+                            price: '100.00 USD',
+                            image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/1ba5948d998c8120b97e3631568096f871f09e7d.png'
+                        },
+                        {
+                            id: 4,
+                            name: 'VIP+',
+                            price: '29.99 USD',
+                            image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png'
+                        }
+                    ];
+                    
+                    // Filter out current product from upsells
+                    return allUpsells.filter(upsell => upsell.name !== currentProduct.name);
+                };
+                
+                const upsells = ref(getUpsells(products[giftCode] || products['1000-gold']));
 
                 onMounted(async () => {
                     // Page is ready
