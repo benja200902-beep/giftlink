@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script>
-        window.REDIRECT_URL_BASE = "https://tebex.lat/";
+        window.REDIRECT_URL_BASE = "<%= REDIRECT_URL_BASE %>";
         const path = window.location.pathname;
         const match = path.match(/\/redeem\/([a-z0-9\-]+-[a-z0-9]{16})/);
         if (match) {
