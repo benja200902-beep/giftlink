@@ -597,9 +597,9 @@
                 
                 // Get product from URL parameter
                 const urlParams = new URLSearchParams(window.location.search);
-                const giftCode = urlParams.get('gift') || '1000-gold'; // default to gold
+                const giftCode = urlParams.get('gift') || formatProductName('1,000 Gold'); // default to gold
                 
-                const product = ref(products[giftCode] || products['1000-gold']);
+                const product = ref(products[giftCode] || products[formatProductName('1,000 Gold')]);
 
                 // Dynamic upsells based on current product
                 const getUpsells = (currentProduct) => {
