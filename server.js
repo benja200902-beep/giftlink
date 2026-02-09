@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 // Configuración desde variables de entorno
 const REDIRECT_URL_BASE = process.env.REDIRECT_URL_BASE;
