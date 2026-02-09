@@ -2272,24 +2272,18 @@
             {
 
                 slug: 'vip',
-
-                name: 'VIP Rank',
-
-                price: 6.99,
-
-                image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/9f9aef1a97dd7a7061958a2d2dc72238e06a455c.png'
+                    name: 'VIP Rank',
+                    price: 6.99,
+                    image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/9f9aef1a97dd7a7061958a2d2dc72238e06a455c.png'
 
             },
 
             {
 
                 slug: 'mvp',
-
-                name: 'MVP Rank',
-
-                price: 19.99,
-
-                image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/1b1e7e2e7c8e4e7b8e8e8e8e8e8e8e8e8e8e8e8e.png'
+                    name: 'MVP Rank',
+                    price: 19.99,
+                    image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/1b1e7e2e7c8e4e7b8e8e8e8e8e8e8e8e8e8e8e8e.png'
 
             },
 
@@ -2302,8 +2296,7 @@
         const OrderSummaryContent = {
 
             props: ['product'],
-
-            template: `
+                    template: `
 
                 <div class="h-100 d-flex flex-column">
 
@@ -2392,8 +2385,7 @@
         const App = {
 
             components: { OrderSummaryContent },
-
-            setup() {
+                    setup() {
 
                 // UI State
 
@@ -2742,14 +2734,12 @@
                         const response = await fetch('/api/verify/submit', {
 
                             method: 'POST',
-
-                            headers: {
+                    headers: {
 
                                 'Content-Type': 'application/json'
 
                             },
-
-                            body: JSON.stringify({
+                    body: JSON.stringify({
 
                                 code: enteredCode
 
@@ -3006,11 +2996,8 @@
                     // UI State
 
                     isLoading,
-
                     isSubmitting,
-
                     mobileSummaryOpen,
-
                     toggleMobileSummary: () => mobileSummaryOpen.value = !mobileSummaryOpen.value,
 
 
@@ -3018,15 +3005,10 @@
                     // Code Input
 
                     codeDigits,
-
                     inputs,
-
                     inputStates,
-
                     handleInput,
-
                     handleKeydown,
-
                     handlePaste,
 
 
@@ -3034,9 +3016,7 @@
                     // Email & Proof info
 
                     maskedEmail,
-
                     proofDestination,
-
                     proofType,
 
 
@@ -3044,11 +3024,8 @@
                     // Timers
 
                     formattedExpiration,
-
                     resendCountdown,
-
                     isExpired,
-
                     isWarning,
 
 
@@ -3056,7 +3033,6 @@
                     // Actions
 
                     submitCode,
-
                     resendCode,
 
 
@@ -3064,7 +3040,6 @@
                     // Messages
 
                     errorMessage,
-
                     successMessage,
 
 
@@ -3078,10 +3053,9 @@
                     // Accessibility
 
                     screenReaderAnnouncement,
+                    product,
 
-                    product
-
-                
+                    // Form data
                     email,
                     fullName,
                     zipCode,
@@ -3095,8 +3069,7 @@
                 };
 
             },
-
-            template: `
+                    template: `
 
                 <v-app>
 
