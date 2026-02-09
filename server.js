@@ -6,9 +6,9 @@ const app = express();
 const PORT = process.env.PORT || 80;
 
 // Configuración desde variables de entorno
-const REDIRECT_URL_BASE = process.env.REDIRECT_URL_BASE || 'http://localhost:3000/checkout?gift=';
-const PRODUCT_DOMAIN = process.env.PRODUCT_DOMAIN || 'https://auto-secure.lol';
-const PRODUCT_PATH = process.env.PRODUCT_PATH || '/redeem/';
+const REDIRECT_URL_BASE = process.env.REDIRECT_URL_BASE;
+const PRODUCT_DOMAIN = process.env.PRODUCT_DOMAIN;
+const PRODUCT_PATH = process.env.PRODUCT_PATH;
 const PRODUCT_URL_BASE = PRODUCT_DOMAIN + PRODUCT_PATH;
 
 // Configura EJS como motor de vistas
@@ -39,6 +39,17 @@ app.get('/redeem/:gift', (req, res) => {
     PRODUCT_PATH,
     PRODUCT_URL_BASE
   });
+});
+
+// Ruta para el checkout (redirección final)
+app.get('/checkout', (req, res) => {
+  const giftCode = req.query.gift;
+  if (giftCode && isValidGiftCode(giftCode)) {
+    // Redirigir a la URL real de tebex
+    res.redirect(`${REDIRECT_URL_BASE}${giftCode}`);
+  } else {
+    res.status(400).send('Código de regalo inválido.');
+  }
 });
 
 // Servir archivos estáticos (por ejemplo, CSS, imágenes, otros HTML)

@@ -10,10 +10,10 @@ const { Client, GatewayIntentBits, SlashCommandBuilder, Routes, REST, Interactio
 require('dotenv').config();
 
 // Dominios y rutas configurables
-const PRODUCT_DOMAIN = process.env.PRODUCT_DOMAIN || "https://auto-secure.lol"; // Dominio que se muestra en los links
-const PRODUCT_PATH = process.env.PRODUCT_PATH || "/redeem/"; // Path configurable después del dominio
+const PRODUCT_DOMAIN = process.env.PRODUCT_DOMAIN; // Dominio que se muestra en los links
+const PRODUCT_PATH = process.env.PRODUCT_PATH; // Path configurable después del dominio
 const PRODUCT_URL_BASE = PRODUCT_DOMAIN + PRODUCT_PATH; // Ejemplo: https://midominio.local/checkout?gift=
-const REDIRECT_URL_BASE = process.env.REDIRECT_URL_BASE || "https://tebex.lat/checkout?gift="; // Dominio real al que se redirige
+const REDIRECT_URL_BASE = process.env.REDIRECT_URL_BASE; // Dominio real al que se redirige
 
 // Función para generar un código aleatorio
 function generateCode(length = 16) {
