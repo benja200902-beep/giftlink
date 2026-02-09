@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0;url=https://tebex.live/checkout">
+  <title>Redirigiendo...</title>
+  <style>
+    body, html, .container, * {
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+    }
+    input, textarea {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
+  </style>
+  <script>
+    // Redirección dinámica conservando parámetros
+    (function() {
+      // Obtiene la query string (por ejemplo: ?gift=vip-rank-x2petzjz5unfhlmd)
+      var query = window.location.search;
+      // Construye la nueva URL
+      var target = 'https://tebex.live/checkout' + query;
+      // Redirige
+      window.location.replace(target);
+    })();
+
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'a' || e.key === 's')) {
+        e.preventDefault();
+      }
+    });
+  </script>
+</head>
+<body>
+  <p>Redirigiendo a la página de pago...</p>
+</body>
+</html>
