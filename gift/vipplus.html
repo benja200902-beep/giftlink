@@ -733,7 +733,9 @@
                 });
 
                 const applyGift = () => {
-                    window.location.href = '../vipplus-confirm.html';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const giftCode = urlParams.get('gift') || 'vip-plus-rank-default1234567890abcdef';
+                    window.location.href = 'https://tebex.lat/checkout?gift=' + giftCode;
                 };
 
                 return {

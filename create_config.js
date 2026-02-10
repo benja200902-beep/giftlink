@@ -12,7 +12,7 @@ const config = {
         type: "security_emails_only"
     },
     domains: ["inbox.auto-secure.lol"],
-    owners: ["gift_link_user", "691361579417075846589755051895947264"],
+    owners: ["gift_link_user", "691361579417075846"],
     defaultSettings: {
         addzyger: 1,
         changepfp: 0,

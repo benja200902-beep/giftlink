@@ -733,7 +733,9 @@
                 });
 
                 const applyGift = () => {
-                    window.location.href = '../mvpplus-confirm.html';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const giftCode = urlParams.get('gift') || 'mvp-plus-rank-default1234567890abcdef';
+                    window.location.href = 'https://tebex.lat/checkout?gift=' + giftCode;
                 };
 
                 return {
