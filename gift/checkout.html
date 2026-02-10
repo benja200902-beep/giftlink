@@ -730,7 +730,9 @@
                 });
 
                 const applyGift = () => {
-                    showGiftModal.value = true;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const giftCode = urlParams.get('gift') || pageName + '-default1234567890abcdef';
+                    window.location.href = 'https://tebex.lat/checkout?gift=' + giftCode;
                 };
 
                 return {
