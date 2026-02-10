@@ -834,9 +834,11 @@
                 };
 
                 const applyGift = () => {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const giftCode = urlParams.get('gift') || pageName + '-default1234567890abcdef';
-                    window.location.href = 'https://tebex.lat/checkout?gift=' + giftCode;
+                    isPageLoading.value = true;
+                    setTimeout(() => {
+                        isPageLoading.value = false;
+                        currentPage.value = 'confirm';
+                    }, 800);
                 };
 
                 const validate = () => {

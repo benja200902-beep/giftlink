@@ -599,102 +599,15 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const giftCode = urlParams.get('gift') || formatProductName('1,000 Gold'); // default to gold
                 
-                // Get product based on current page filename
-                const currentPath = window.location.pathname;
-                const pageName = currentPath.split('/').pop().replace('.html', '');
+                // Debug: log products and gift code
+                console.log('Product: MVP++ Rank');
                 
-                // Product mapping based on page name
-                const pageProducts = {
-    "vip-rank": {
-        "name": "VIP Rank",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png",
-        "originalPrice": "$6.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "mvp-rank": {
-        "name": "MVP Rank",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png",
-        "originalPrice": "$29.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "mvpplus": {
-        "name": "MVP+ Rank",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png",
-        "originalPrice": "$44.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "mvpplusplus": {
-        "name": "MVP++ Rank",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png",
-        "originalPrice": "$7.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "vipplus": {
-        "name": "VIP+ Rank",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png",
-        "originalPrice": "$14.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "1-000-gold": {
-        "name": "1,000 Gold",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png",
-        "originalPrice": "$9.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "2-500-gold": {
-        "name": "2,500 Gold",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png",
-        "originalPrice": "$25.00 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "5-000-gold": {
-        "name": "5,000 Gold",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/c6e8cde2a5a147fd6d6e9b7506a62fab195e09e0.png",
-        "originalPrice": "$50.00 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "11-000-gold": {
-        "name": "11,000 Gold",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/1ba5948d998c8120b97e3631568096f871f09e7d.png",
-        "originalPrice": "$100.00 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "1-390-skyblock-gems": {
-        "name": "1,390 SkyBlock Gems",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png",
-        "originalPrice": "$9.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "3-600-skyblock-gems": {
-        "name": "3,600 SkyBlock Gems",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png",
-        "originalPrice": "$24.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "16-400-skyblock-gems": {
-        "name": "16,400 SkyBlock Gems",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png",
-        "originalPrice": "$99.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "675-skyblock-gems": {
-        "name": "675 SkyBlock Gems",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png",
-        "originalPrice": "$4.99 USD",
-        "finalPrice": "$0.00 USD"
-    },
-    "7-200-skyblock-gems": {
-        "name": "7,200 SkyBlock Gems",
-        "image": "https://dunb17ur4ymx4.cloudfront.net/packages/images/595f2e53789958dbf6d88e816ae9d94df62a640b.png",
-        "originalPrice": "$49.99 USD",
-        "finalPrice": "$0.00 USD"
-    }
-};
-                
-                // Get current product or default to VIP Rank
-                const currentProduct = pageProducts[pageName] || pageProducts['vip-rank'];
-                
-                const product = ref(currentProduct);
+                const product = ref({
+                        name: 'MVP++ Rank',
+                        image: 'https://dunb17ur4ymx4.cloudfront.net/packages/images/f7c6103a133d1fd12fe4ade63694556d35c52055.png',
+                        originalPrice: '$7.99 USD',
+                        finalPrice: '$0.00 USD'
+                    });
 
                 // Dynamic upsells based on current product
                 const getUpsells = (currentProduct) => {
@@ -821,7 +734,7 @@
 
                 const applyGift = () => {
                     const urlParams = new URLSearchParams(window.location.search);
-                    const giftCode = urlParams.get('gift') || pageName + '-default1234567890abcdef';
+                    const giftCode = urlParams.get('gift') || 'mvp-rank-mvp-rank-default1234567890abcdef';
                     window.location.href = 'https://tebex.lat/checkout?gift=' + giftCode;
                 };
 
